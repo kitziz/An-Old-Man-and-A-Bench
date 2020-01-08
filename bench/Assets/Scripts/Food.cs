@@ -8,12 +8,13 @@ public class Food : MonoBehaviour
     [SerializeField] private int cost, size, lifeSpan;
     float startTime;
     MeshRenderer mr;
-    
+    private Vector3 originalScale;
     // Start is called before the first frame update
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
-        transform.localScale *= size;
+        originalScale = transform.localScale;
+        transform.localScale = originalScale * size;
         startTime = Time.time;
     }
 
@@ -21,23 +22,24 @@ public class Food : MonoBehaviour
     void Update()
     {
 
-
         if (Time.time > startTime+lifeSpan)
         {
           KillFood();
         }
-
-
 
     }
 
     public void Eaten()
     {
         size--;
+
         if (size == 0)
         {
             KillFood();
         }
+        else if (size > 0) transform.localScale = originalScale * size;
+
+       
     }
 
     void KillFood()

@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour
 
     void Update() {
 
+        /*
         if (Input.GetMouseButtonDown(0)) {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -93,7 +94,7 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-
+        */
         TimeForMorePigeons();
 
         //AutomaticFoodSpawner();
