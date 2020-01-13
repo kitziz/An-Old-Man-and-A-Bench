@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         
         for (int i = 0; i < CrumbAmmount; i++)
         {
-            var targetPosRnd = targetPosition + new Vector3(Random.value*3, 0, Random.value*3);
+            var targetPosRnd = targetPosition; // + new Vector3(Random.value*3, 0, Random.value*3);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
             food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
             food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);

@@ -20,7 +20,7 @@ public class Pigeon : MonoBehaviour
     private GameObject target;
     private NavMeshAgent agent;
 
-    private enum State { IDLE, FOOD, EAT, FLY, FLY_IN};
+    private enum State { IDLE, FOOD, EAT, FLY, FLY_IN, FLY_OUT};
     private State state;
     private float timeSiceLastSpawn;
     public Food myFood;
@@ -49,9 +49,7 @@ public class Pigeon : MonoBehaviour
 
 
     void Update()
-    {
-
-        SelfDestroyOnLifeTime();
+    {        
         NavAnimationVelocity();
         hunger -= hungerRate * Time.deltaTime;         updateHungerBar(); 
         if (1 < transform.position.y && transform.position.y < 2) anim.SetTrigger("touchDown");
@@ -160,11 +158,13 @@ public class Pigeon : MonoBehaviour
             case State.FOOD:
                 agent.SetDestination(myFood.transform.position);
                 break;
-            case State.EAT:
-                
+            case State.EAT:                
                  StartCoroutine(Eating());
                 break;
             case State.FLY:
+                break;
+            case State.FLY_OUT:
+                anim.SetTrigger("takeOff");
                 break;
         }
         state = _state;
@@ -221,6 +221,7 @@ public class Pigeon : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    /*
     void SelfDestroyOnLifeTime()
     {
         // self destruction by lifeTime parameter plus chance factor
@@ -239,7 +240,7 @@ public class Pigeon : MonoBehaviour
                 timeAlive = 0f; // get new life cycle
         }
     }
-
+    */
 
 
     private void NavAnimationVelocity()
@@ -317,6 +318,8 @@ public class Pigeon : MonoBehaviour
     void updateHungerBar()
     {
         hugerSlider.value = hunger;
+        if (hunger <= 0 && state != State.FLY_OUT) SetState(State.FLY_OUT);
+        
     }
 
     public void AddEnergy()
