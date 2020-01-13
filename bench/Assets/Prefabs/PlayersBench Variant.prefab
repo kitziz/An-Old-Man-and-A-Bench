@@ -527,8 +527,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6096e4557bae645a809cff388875cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 10
   playerBody: {fileID: 262130409}
+  foodPrefab: {fileID: 54736477665363916, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
+    type: 3}
+  crumbAmountMin: 3
+  crumbAmountMax: 8
+  throwForce: 300
 --- !u!1 &1808038044
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,8 +549,8 @@ GameObject:
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1808038045
 Transform:
@@ -556,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 1808038044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.41}
-  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 1450904957}
   m_RootOrder: 0
@@ -646,6 +651,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 1e5759653e3e75643b3f3fa8bd00397f, type: 3}
       propertyPath: m_Name
       value: PlayersBench01
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 1e5759653e3e75643b3f3fa8bd00397f, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1e5759653e3e75643b3f3fa8bd00397f, type: 3}
       propertyPath: m_StaticEditorFlags

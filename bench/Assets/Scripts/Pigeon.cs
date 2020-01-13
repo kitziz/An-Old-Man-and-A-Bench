@@ -101,7 +101,7 @@ public class Pigeon : MonoBehaviour
 
 
         //LOOK FOR FOOD
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
         int i = 0;
         while (i < hitColliders.Length)
         {

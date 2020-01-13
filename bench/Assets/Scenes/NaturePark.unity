@@ -200,6 +200,10 @@ PrefabInstance:
       propertyPath: crumbAmountMax
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1450904958, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
+      propertyPath: mouseSensitivity
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
 --- !u!1001 &6944750
@@ -1090,7 +1094,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &74860775 stripped
 Transform:
@@ -4307,11 +4311,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayersBench01
       objectReference: {fileID: 0}
-    - target: {fileID: 6487606987090337136, guid: 5138d3255353033459fc2b21cf77d78b,
-        type: 3}
-      propertyPath: m_NavMeshLayer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6487606987090231632, guid: 5138d3255353033459fc2b21cf77d78b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4350,7 +4349,7 @@ PrefabInstance:
     - target: {fileID: 6487606987090231632, guid: 5138d3255353033459fc2b21cf77d78b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6487606987090231632, guid: 5138d3255353033459fc2b21cf77d78b,
         type: 3}
@@ -4367,39 +4366,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1808038044, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808038044, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808038045, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808038045, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808038045, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1450904958, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1450904958, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
       propertyPath: foodPrefab
       value: 
-      objectReference: {fileID: 54736477665363916, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
+      objectReference: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
         type: 3}
-    - target: {fileID: 1450904958, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
-      propertyPath: throwForce
-      value: 300
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5138d3255353033459fc2b21cf77d78b, type: 3}
 --- !u!4 &428670226 stripped
@@ -7193,7 +7164,7 @@ TerrainCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673413767}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: dea120b7d6d271b4e936b0d0dba55aec, type: 2}
   m_Enabled: 1
   m_TerrainData: {fileID: 15600000, guid: bf79e81e343317a43970451804107e63, type: 2}
   m_EnableTreeColliders: 1
@@ -13657,7 +13628,7 @@ PrefabInstance:
     - target: {fileID: 6487606987090231632, guid: 5138d3255353033459fc2b21cf77d78b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6487606987090231632, guid: 5138d3255353033459fc2b21cf77d78b,
         type: 3}
@@ -14291,7 +14262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1211332351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14321,8 +14292,8 @@ MonoBehaviour:
   txtHAngry: {fileID: 5413206569712852646}
   txtCoins: {fileID: 5413206569239809525}
   txtHCoins: {fileID: 5413206569097323501}
-  cycleTimeNewPigeons: 8
-  MaxNewPigeonsNum: 8
+  cycleTimeNewPigeons: 3
+  MaxNewPigeonsNum: 10
   pigeonMinHappiness: 1
   pigeonMaxHappiness: 10
   pigeonAngryAt: 2
@@ -14363,7 +14334,7 @@ Transform:
   - {fileID: 1073705605}
   - {fileID: 1052150712}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1224824966
 PrefabInstance:
