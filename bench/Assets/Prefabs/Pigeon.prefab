@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001d7c128a195594d914176ad1c79a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expirationTime: 20
+  expirationTime: 0
   myTexture:
   - {fileID: 2800000, guid: 4ac9082a5633f574eb3e25c4ede825e1, type: 3}
   - {fileID: 2800000, guid: 8fdec0280c05b1949ae6899f9d030862, type: 3}

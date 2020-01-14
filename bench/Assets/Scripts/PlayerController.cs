@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     private float xRotation = 0;
+    public AudioSource failAudioClip;
+
 
 
     //==================== Feeding Members ====================
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        failAudioClip = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -35,24 +38,58 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up*mouseX);
 
-        // Trowing Food exactly to where player clicks
+        // Trowing Food exactly to where player left-clicks
         if (Input.GetMouseButtonDown(0))
+        {
+            if (PlayerStats.FoodAvailable[0] > 0)
+            { 
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 60f))
+                {
+                    if (hit.transform != null)
+                    {
+                        Debug.Log("=====HIT" + hit.transform.name);
+                        ThrowFood(hit.point);
+                        PlayerStats.FoodAvailable[0]--;
+                    }
+                }
+            }
+            else
+                failAudioClip.Play(0);
+        }
+
+        // right-click for collecting food
+        if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 60f))
-            {                
+            {
                 if (hit.transform != null)
                 {
-                    Debug.Log("HIT" + hit.transform.name);
-                    ThrowFood(hit.point);
-                    //foodClickedCntr++;
+                    Debug.Log("=====HIT" + hit.transform.name);
+                    if (hit.transform.name == "COIN")
+                    {
+                        PlayerStats.CoinsNum++;
+                        CoinCollected(hit.transform.gameObject);
+                    }
+                    else
+                        failAudioClip.Play(0);
                 }
             }
         }
 
+
         //if (Input.GetMouseButtonDown(0)) ThrowFood();
     }
+
+
+    void CoinCollected(GameObject go)
+    {
+        Destroy(go);
+    }
+
 
     void ThrowFood(Vector3 targetPosition)
     {
@@ -71,5 +108,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
-   
+
+ 
+
+
 }
