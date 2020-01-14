@@ -66,14 +66,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450904944}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.29458553, y: 0.000000029802322, z: -0.000000029802322, w: 0.9556252}
+  m_LocalPosition: {x: -0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1808038045}
   m_Father: {fileID: 262130409}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.265003, y: 0, z: 0}
 --- !u!20 &1450904956
 Camera:
   m_ObjectHideFlags: 0
@@ -89,7 +89,7 @@ Camera:
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_GateFitMode: 1
-  m_FocalLength: 28
+  m_FocalLength: 24
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -98,7 +98,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 46.397182
+  field of view: 53.130104
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -529,11 +529,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 10
   playerBody: {fileID: 262130409}
-  foodPrefab: {fileID: 54736477665363916, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
+  foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
     type: 3}
-  crumbAmountMin: 3
-  crumbAmountMax: 8
-  throwForce: 300
+  crumbAmountMin: 1
+  crumbAmountMax: 1
 --- !u!1 &1808038044
 GameObject:
   m_ObjectHideFlags: 0

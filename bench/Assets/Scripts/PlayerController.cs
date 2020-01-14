@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     //==================== Feeding Members ====================
     [SerializeField] private Food foodPrefab;
     [SerializeField] private int crumbAmountMin = 5, crumbAmountMax = 15 ;
-    [SerializeField] private float throwForce = 10f;
+    //[SerializeField] private float throwForce = 10f;
 
 
 
