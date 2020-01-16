@@ -189,12 +189,10 @@ public class Pigeon : MonoBehaviour
             {
                 SetNewTarget();
                 targetReachTime = Time.realtimeSinceStartup;
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {}
             }
         }
-
-
-        //LOOK FOR FOUND_FOOD
+        
+        //check for food in radius
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
         int i = 0;
         while (i < hitColliders.Length)
@@ -221,7 +219,7 @@ public class Pigeon : MonoBehaviour
         {
             Debug.Log("is stanting.........");
             agent.isStopped = true;
-            if (Random.Range(0,1000) == 500) Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
+            if (Random.Range(0,10) == 1) Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
         }
         else
         {
