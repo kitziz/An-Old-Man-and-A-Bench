@@ -227,9 +227,27 @@ public class Pigeon : MonoBehaviour
         timeAlive += Time.deltaTime;
         if (expirationTime > 0f && timeAlive > expirationTime)
         {
+<<<<<<< HEAD
             Debug.Log("------lifeTime----" + gameObject);
             int moreCycles = Random.Range(0, 2);// destroy chance is 0.50 each cycle 
             if (moreCycles == 0)
+=======
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                SetNewTarget();
+                targetReachTime = Time.realtimeSinceStartup;
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {}
+            }
+        }
+
+
+        //LOOK FOR FOUND_FOOD
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            if (hitColliders[i].tag == "Food")
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
             {
                 Debug.Log("------self destroying----" + gameObject);
                 anim.SetTrigger("takeOff");
@@ -241,6 +259,24 @@ public class Pigeon : MonoBehaviour
     }
 
 
+<<<<<<< HEAD
+=======
+        if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+        {
+            Debug.Log("is stanting.........");
+            agent.isStopped = true;
+            if (Random.Range(0,1000) == 500) Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("SetNewTarget");
+            Vector2 pos = Random.insideUnitCircle * walkRadius;
+            agent.isStopped = false;
+            agent.SetDestination(PickPointOnMesh());
+        }
+       
+    }
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
 
     private void NavAnimationVelocity()
     {

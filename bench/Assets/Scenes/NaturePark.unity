@@ -7839,8 +7839,13 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: -122, y: 197.50002}
   m_SizeDelta: {x: 550, y: 65}
+=======
+  m_AnchoredPosition: {x: -151, y: 197.50002}
+  m_SizeDelta: {x: 498, y: 65}
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &726276061
 MonoBehaviour:
@@ -14414,7 +14419,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1211332352}
   - component: {fileID: 1211332351}
-  - component: {fileID: 1211332353}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -14440,13 +14444,18 @@ MonoBehaviour:
     type: 3}
   foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
     type: 3}
+  fieldRadius: 0
   birdsPlayground: {fileID: 72866524}
+<<<<<<< HEAD
   pigeonPrice: 010000000300000005000000
   foodPrice: 0100000002000000
   initFood: 10
   initCoinsNum: 10
   maxCoinsNum: 0
   failAudioClip: {fileID: 1211332353}
+=======
+  skyRadius: 100
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
   txtPigeons: {fileID: 5413206568678055030}
   txtHPigeons: {fileID: 5413206569696977065}
   txtHappy: {fileID: 5413206569348893568}
@@ -14455,6 +14464,7 @@ MonoBehaviour:
   txtHAngry: {fileID: 5413206569712852646}
   txtCoins: {fileID: 5413206569239809525}
   txtHCoins: {fileID: 5413206569097323501}
+<<<<<<< HEAD
   txtFood: {fileID: 939692098}
   txtHFood: {fileID: 1580962267}
   cycleTimeNewPigeons: 0
@@ -14467,6 +14477,21 @@ MonoBehaviour:
   coinGrntAtHappyRate: 0.7
   coinLostAtAngryRate: 0.5
   cycleTimeNewCoins: 0
+=======
+  cycleTimeNewPigeons: 5
+  MaxNewPigeonsNum: 3
+  pigeonMinHappiness: 1
+  pigeonMaxHappiness: 10
+  pigeonAngryAt: 2
+  pigeonHappyAt: 6
+  cycleTimeCalcStatistics: 3
+  coinsRatioPigeons: 0.3
+  coinsRatioHappy: 0.2
+  coinsRatioAngry: 0.2
+  coinsRatioLose: 0.2
+  CoinRatioFood: 5
+  cycleTimeNewCoins: 20
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
   pigeonStatistCreated: 0
   pigeonStatistExist: 0
   pigeonStatistMax: 0
@@ -14479,7 +14504,8 @@ MonoBehaviour:
   lastFoodCntr: 0
   lastFoodClickedCntr: 0
   foodClickedCntr: 0
-  maxFood: 0
+  coinsNum: 0
+  maxCoinsNum: 0
   pigeons: []
 --- !u!4 &1211332352
 Transform:
@@ -14497,6 +14523,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!82 &1211332353
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14593,6 +14620,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+=======
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
 --- !u!1001 &1224824966
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25017,9 +25046,12 @@ RectTransform:
   - {fileID: 5413206568892784444}
   - {fileID: 5413206569239809524}
   - {fileID: 5413206569097323500}
+<<<<<<< HEAD
   - {fileID: 291804553}
   - {fileID: 939692099}
   - {fileID: 1580962270}
+=======
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
