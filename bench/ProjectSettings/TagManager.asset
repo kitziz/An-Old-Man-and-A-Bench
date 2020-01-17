@@ -8,6 +8,7 @@ TagManager:
   - Target
   - Pigeon
   - Coin
+  - PigeonGround
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 public class Pigeon : MonoBehaviour
-{      
+{
     public Texture[] myTexture;                             // Defining pigeon oclors texture
 
     [SerializeField] private GameObject targetPrefab;       // a "null" taget prefab for the navmesh agent
@@ -21,11 +21,12 @@ public class Pigeon : MonoBehaviour
 
     // related assets 
     public Food myFood;
-    public GameObject coinPrephab;
+    public Coin coinPrephab;
 
     // various rates & measurments
     private float timeSiceLastSpawn;
-    private float hungerRate;
+    [Range(0.0f, 1.2f)] private float hungerRate;
+    
     
     // states and animations
     private Animator anim;
@@ -191,15 +192,26 @@ public class Pigeon : MonoBehaviour
                 targetReachTime = Time.realtimeSinceStartup;
             }
         }
+        CheckForFood();
+    } 
         
-        //check for food in radius
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
+    
+    //check for food in radius
+    void CheckForFood() { 
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 30);
         int i = 0;
         while (i < hitColliders.Length)
         {
             if (hitColliders[i].tag == "Food")
             {
-                myFood = hitColliders[i].GetComponent<Food>();
+                if (myFood != null)
+                {
+                    var iFoodDist = (hitColliders[i].transform.position - transform.position).magnitude;
+                    var myFoodDist = (myFood.transform.position - transform.position).magnitude;
+                    
+                    if(iFoodDist < myFoodDist) myFood = myFood = hitColliders[i].GetComponent<Food>();
+                }
+                else myFood = hitColliders[i].GetComponent<Food>();
             }
             i++;
         }
@@ -208,25 +220,31 @@ public class Pigeon : MonoBehaviour
             agent.isStopped = false;
             SetState(State.FOUND_FOOD);
         }
+    }
 
-    } 
-    
     void SetNewTarget()
     {
         var standingTime = Random.Range(0f, 5f);
 
-        if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+        if (myState == State.WANDER)
         {
-            Debug.Log("is stanting.........");
-            agent.isStopped = true;
-            if (Random.Range(0,10) == 1) Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Debug.Log("SetNewTarget");
-            Vector2 pos = Random.insideUnitCircle * walkRadius;
-            agent.isStopped = false;
-            agent.SetDestination(PickPointOnMesh());
+            if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+            {
+                Debug.Log("is stanting.........");
+                agent.isStopped = true;
+                if (Random.Range(1,100) == 1)
+                {
+                    var newCoin = Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
+                    newCoin.SetCoin();
+                }
+            }
+            else
+            {
+                Debug.Log("SetNewTarget");
+                Vector2 pos = Random.insideUnitCircle * walkRadius;
+                agent.isStopped = false;
+                agent.SetDestination(PickPointOnMesh());
+            }
         }
        
     }
@@ -247,16 +265,17 @@ public class Pigeon : MonoBehaviour
         if (!myFood) SetState(State.WANDER);
         else agent.SetDestination(myFood.transform.position);
 
+        CheckForFood();
 
         if (agent.isActiveAndEnabled && !agent.pathPending)
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 SetState(State.EATING); 
-                  
-                //if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) { }
             }
         }
+
+        
     }
     
 
@@ -269,7 +288,7 @@ public class Pigeon : MonoBehaviour
             SetState(State.WANDER);
         }
 
-        else if (agent)
+        else 
         {
             agent.isStopped = true;
             anim.SetBool("isEating", true);
@@ -283,8 +302,8 @@ public class Pigeon : MonoBehaviour
             hungerRate -= hungerDeterior * Time.deltaTime;
             hugerSlider.value = hungerRate;
             agent.speed = PigeonSpeed / Mathf.Clamp(hungerRate, 0.3f, 1.0f);
-            transform.localScale = new Vector3 ((0.4f + hungerRate / 1.5f), (0.6f + hungerRate / 6f), 0.6f);
-            if (hungerRate <= 0) SetState(State.FLY_OUT);
+            transform.localScale = new Vector3 (0.3f + (0.5f * hungerRate), transform.localScale[1], transform.localScale[2]);
+            if (hungerRate <= 0 && myState != State.EATING) SetState(State.FLY_OUT);
         }
         
     }

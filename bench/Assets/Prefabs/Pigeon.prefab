@@ -81,9 +81,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2662433666593753882}
-  - component: {fileID: 1885996292630469432}
   - component: {fileID: 7745799570278869022}
-  - component: {fileID: 8266166845747670123}
+  - component: {fileID: 1885996292630469432}
   m_Layer: 0
   m_Name: Pigeon
   m_TagString: Untagged
@@ -107,6 +106,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &7745799570278869022
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2662433666593753884}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.56
+  m_Speed: 8
+  m_Acceleration: 4
+  avoidancePriority: 50
+  m_AngularSpeed: 500
+  m_StoppingDistance: 0.2
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 0
+  m_Height: 1.87
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &1885996292630469432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,45 +148,9 @@ MonoBehaviour:
   targetPrefab: {fileID: 1572784492859180594, guid: b3514b60e5ee5aa4f848056a07305634,
     type: 3}
   hugerSlider: {fileID: 183517777514656022}
-  hungerDeterior: 0.05
+  hungerDeterior: 0.1
   myFood: {fileID: 0}
-  coinPrephab: {fileID: 1021252036690894237, guid: 27e4e860175207d418ffb71109c1ba57,
-    type: 3}
---- !u!195 &7745799570278869022
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2662433666593753884}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.56
-  m_Speed: 8
-  m_Acceleration: 4
-  avoidancePriority: 50
-  m_AngularSpeed: 500
-  m_StoppingDistance: 0.01
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1.87
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!135 &8266166845747670123
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2662433666593753884}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.65
-  m_Center: {x: 0, y: 0, z: 0}
+  coinPrephab: {fileID: 0}
 --- !u!1 &4289137567761352363
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,7 +179,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4289137567761352363}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.435}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 678081678951887017}
@@ -204,7 +189,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 3.5}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 150, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6318586077342774092
 Canvas:
@@ -558,7 +543,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 449556, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 449556, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalRotation.x

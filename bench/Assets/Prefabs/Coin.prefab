@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3643590225827083949}
+  - component: {fileID: 5785708346885883096}
+  - component: {fileID: 114567847008574294}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Coin
@@ -31,6 +33,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5785708346885883096
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021252036690894237}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &114567847008574294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021252036690894237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd00ca508de98bc438bc74dc197a0765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinMaterial:
+  - {fileID: 2100000, guid: 6c06eaf6573b6484a903049f128545c1, type: 2}
+  - {fileID: 2100000, guid: 18493944eaac3254b832e6a5b372e8e9, type: 2}
+  - {fileID: 2100000, guid: f85a6cc629261384ea242307da662c7d, type: 2}
+  - {fileID: 2100000, guid: 7a251e34b9529ba44949d6a4dddf79e6, type: 2}
+  coinValue: 1
 --- !u!1 &7337248846809900310
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,7 +75,6 @@ GameObject:
   - component: {fileID: 3988187504194758870}
   - component: {fileID: 7036438172475780363}
   - component: {fileID: 5393450857425378287}
-  - component: {fileID: 8408259586781321891}
   - component: {fileID: 1502292041183458144}
   m_Layer: 0
   m_Name: Coin
@@ -110,20 +142,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &8408259586781321891
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7337248846809900310}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!95 &1502292041183458144
 Animator:
   serializedVersion: 3

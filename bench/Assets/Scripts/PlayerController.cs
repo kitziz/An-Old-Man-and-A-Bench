@@ -45,22 +45,25 @@ public class PlayerController : MonoBehaviour
             { 
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 60f))
+                if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.transform != null)
+                    if (hit.transform.gameObject.tag == "PigeonGround")
                     {
-                        Debug.Log("=====HIT" + hit.transform.name);
+                        Debug.Log("HIT the ground runing!" + hit.transform.name);
                         ThrowFood(hit.point);
-                        PlayerStats.FoodAvailable[0]--;
+                    }
+                    else if (hit.transform.tag == "Coin")
+                    {
+                        Debug.Log("HIT Capitalist!" + hit.transform.name);
+                        CoinCollected(hit.transform.gameObject);
                     }
                 }
             }
-            else
-                failAudioClip.Play(0);
         }
 
         // right-click for collecting food
-        if (Input.GetMouseButtonDown(1))
+        /*
+         * if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -75,6 +78,7 @@ public class PlayerController : MonoBehaviour
               
             }
         }
+        */
 
 
         //if (Input.GetMouseButtonDown(0)) ThrowFood();
@@ -92,6 +96,9 @@ public class PlayerController : MonoBehaviour
 
     void ThrowFood(Vector3 targetPosition)
     {
+        //PlayerStats.FoodAvailable[0]--;
+        PlayerStats.CoinsNum -= 1;
+
         Vector3 playerPos = this.transform.position;
         int CrumbAmmount = Random.Range(crumbAmountMin, crumbAmountMax);
         
@@ -101,7 +108,7 @@ public class PlayerController : MonoBehaviour
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
             food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
             food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveY(targetPosRnd[1], 1f).From(playerPos).SetEase(Ease.InOutCubic);
+            food.transform.DOMoveY(.5f , 1f).From(playerPos).SetEase(Ease.InOutCubic);
             //food.AddForce(directionRandom * Random.Range(throwForce * 0 8f, throwForce * 1.2f));
         }
 
