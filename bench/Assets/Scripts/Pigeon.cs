@@ -302,7 +302,7 @@ public class Pigeon : MonoBehaviour
             hungerRate -= hungerDeterior * Time.deltaTime;
             hugerSlider.value = hungerRate;
             agent.speed = PigeonSpeed / Mathf.Clamp(hungerRate, 0.3f, 1.0f);
-            transform.localScale = new Vector3 (0.3f + (0.5f * hungerRate), transform.localScale[1], transform.localScale[2]);
+            // transform.localScale = new Vector3 (0.3f + (0.5f * hungerRate), transform.localScale[1], transform.localScale[2]);
             if (hungerRate <= 0 && myState != State.EATING) SetState(State.FLY_OUT);
         }
         
