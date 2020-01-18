@@ -7,40 +7,46 @@ using DG.Tweening;
 
 public class Pigeon : MonoBehaviour
 {
-    // self destruction
-    public float expirationTime = 20f; //0 for no expiration
-    
-    public Texture[] myTexture;
+    public Texture[] myTexture;                             // Defining pigeon oclors texture
 
-    [SerializeField] private GameObject targetPrefab;
-    [SerializeField] private Slider hugerSlider;
-    [SerializeField] private float hungerRate = 0.01f;
+    [SerializeField] private GameObject targetPrefab;       // a "null" taget prefab for the navmesh agent
+    [SerializeField] private Slider hungerSlider;            // a canvas that visulizes Hanger Rate
+    [SerializeField] private float hungerDeterior = 0.01f;  // Hanger deterioration per sec
 
-
-    private GameObject target;
+    // navigation members
     private NavMeshAgent agent;
+    private GameObject target; // helps seting a new target for navmesh
+    private float targetReachTime; // helps counting standing time
+    private float walkRadius = 12f; // the radius for searching targets
+    private float PigeonSpeed; // remebers original agent.speed and caculate relative speeds
 
-    private enum State { IDLE, FOOD, EAT, FLY, FLY_IN};
-    private State state;
+    // related assets 
+    public Food myFood; //current food to go to
+    public Coin coinPrephab;
+    public int coinDropRate = 1000; // a random chance of droping coins while searching food
+    private bool coinDropped = true; // prevents multiple coin drops at once
+
+    // various rates & measurments
     private float timeSiceLastSpawn;
-    public Food myFood;
-    private float hunger;
-    private Animator anim;
+    private float hungerRate;
     
-    private float walkRadius = 10f;
-
-    // count till self destruction or new life
-    float timeAlive;
-
+    
+    // states and animations
+    private Animator anim;
+    private enum State { FLY_IN, WANDER, FOUND_FOOD, EATING, FLY_OUT, FLYING };
+    private State myState;
+         
 
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();     
-        hugerSlider = GetComponentInChildren<Slider>();
+        hungerSlider = GetComponentInChildren<Slider>();
         anim = GetComponentInChildren<Animator>();
         target = Instantiate(targetPrefab, Vector3.zero, Quaternion.identity);
-                
+
+        SetupBird();
+
         SetState( State.FLY_IN);  
  
     }
@@ -50,159 +56,103 @@ public class Pigeon : MonoBehaviour
 
     void Update()
     {
-
-        SelfDestroyOnLifeTime();
+        hungerRate = Mathf.Clamp(hungerRate, -0.5f, 1.2f);
         NavAnimationVelocity();
-        hunger -= hungerRate * Time.deltaTime;         updateHungerBar(); 
-        if (1 < transform.position.y && transform.position.y < 2) anim.SetTrigger("touchDown");
-
-        switch (state) {
-            case State.IDLE:
-                IdleMode();                
+        
+        switch (myState) {
+            case State.FLY_IN:
+                if (transform.position.y <= 1) anim.SetTrigger("touchDown");
+                hungerRate = 1;
                 break;
-            case State.FOOD:
+            case State.WANDER:
+                hungerRate -= hungerDeterior * Time.deltaTime;
+                updateHungerBar();
+                FoodSearching();
+                DropCoin();
+                break;
+            case State.FOUND_FOOD:
+                updateHungerBar();
                 FoodMode();
                 break;
-            case State.EAT:
+            case State.EATING:
+                updateHungerBar();
+                Eating();
                 break;
-            case State.FLY:
+            case State.FLY_OUT:
+                break;
+            case State.FLYING:
                 break;
         }
        
     }
 
-
-
-
-    void SetupBird()
+    //==================================== Defining each state behaiour ==========================================//
+    void SetState(State newState)
     {
-        agent.enabled = true;
-
-        agent.speed = Random.Range(4f, 10f);
-        agent.angularSpeed = Random.Range(300f, 700f);
-        float rand = Mathf.Floor(Random.Range(0f, 3f));
-       
-            SkinnedMeshRenderer mr = GetComponentInChildren<SkinnedMeshRenderer>();
-            mr.materials[0].mainTexture = myTexture[(int)rand];
-    }
-
-
-    
-    void IdleMode()
-    {
-        if (agent.isActiveAndEnabled && !agent.pathPending)
-        {
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                SetNewTarget();
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {}
-            }
-        }
-
-
-        //LOOK FOR FOOD
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
-        int i = 0;
-        while (i < hitColliders.Length)
-        {
-            if (hitColliders[i].tag == "Food")
-            {
-                myFood = hitColliders[i].GetComponent<Food>() ;               
-            }
-            i++;
-        }
-        if (myFood != null)
-        {
-            SetState(State.FOOD);
-        }
-
-    }
-    
-
-
-    void FoodMode()
-    {
-        if (!myFood)
-        {
-            SetState(State.IDLE);
-        }
-
-
-        if (agent.isActiveAndEnabled && !agent.pathPending)
-        {
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                SetState(State.EAT); 
-                  
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) { }
-            }
-        }
-    }
-       
-
-
-    void SetState(State _state)
-    {
-        Debug.Log("Set State To" + _state);
-        switch (_state)
+        Debug.Log("Set State To" + newState);
+        switch (newState)
         {
 
             case State.FLY_IN:
                 agent.enabled = false;
-                hunger = 1;
                 FlyIn();
                 break;
-            case State.IDLE:               
+            case State.WANDER:               
                 agent.enabled = true;
                 SetNewTarget();
                 agent.SetDestination(target.transform.position);
                 break;
-            case State.FOOD:
-                agent.SetDestination(myFood.transform.position);
+            case State.FOUND_FOOD:
                 break;
-            case State.EAT:
-                
-                 StartCoroutine(Eating());
+            case State.EATING:                
                 break;
-            case State.FLY:
+            case State.FLY_OUT:
+                anim.SetTrigger("takeOff");
+                break;
+            case State.FLYING:
                 break;
         }
-        state = _state;
+        myState = newState;
     }
 
+    private void NavAnimationVelocity() //defining walk and idle animations according to movemevt and speed
+    {
+        float velocity = agent.velocity.magnitude / agent.speed;
+        anim.SetFloat("walkSpeed", velocity);
+        
+        // change type of idle after pigeon wlked at avarage speed or above
+        if (velocity > 0.4f) anim.SetFloat("idleType", Random.value);
+    }
 
+    // ==================== flying in/out methods ========================= 
 
- 
     public void FlyIn()
     {
         Vector3 fromPos = transform.position;
-        Vector3 toPos = new Vector3(Random.Range(-20,20), 0, Random.Range(-30, 10));
-        float flightTime = Random.Range(2, 4);
+        Vector3 landingCircle = Random.insideUnitSphere * 10;
+        Vector3 toPos = new Vector3(landingCircle.x, 0, landingCircle.z);
+        float flightTime = Random.Range(2f, 4f);
         target.transform.position = toPos;
 
-        transform.DOMove(toPos, flightTime).From(fromPos).OnComplete(Land).SetEase(Ease.OutQuad);
+        transform.DOMoveX(toPos.x, flightTime).From(fromPos.x).SetEase(Ease.InOutSine);
+        transform.DOMoveZ(toPos.z, flightTime).From(fromPos.z).SetEase(Ease.InOutSine);
+        transform.DOMoveY(toPos.y, flightTime).From(fromPos.y).OnComplete(Land).SetEase(Ease.InOutQuad);
 
         var lookTowards = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.x);
         transform.LookAt(lookTowards);
-        
+                
         //var direction = (target.transform.position - fromPos).normalized;
         //var directionFlat = direction - new Vector3(direction.x ,0,direction.z);
         //transform.DORotate(directionFlat, flightTime).From(direction).SetEase(Ease.InQuint);
 
     }
 
-
-
-
     void Land()
     {
-        //transform.DOMoveY(0, 0.5f);
-        SetState(State.IDLE);
-        //anim.SetTrigger("touchDown");
+        SetState(State.WANDER);
+        targetReachTime = Time.realtimeSinceStartup;
     }
 
-
-    
     public void FlyOut()
     {         
         Vector3 fromPos = transform.position;
@@ -210,7 +160,10 @@ public class Pigeon : MonoBehaviour
         Vector3 toPos = new Vector3(circlePos.x, 30, circlePos.y);
         float flightTime = Random.Range(2, 4);
         target.transform.position = toPos;
-        transform.LookAt(target.transform);
+
+        var lookTowards = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.x);
+        transform.LookAt(lookTowards);
+        
 
         transform.DOMove(toPos, flightTime).From(fromPos).OnComplete(DestroyPigeon).SetEase(Ease.InCubic);
         
@@ -221,156 +174,212 @@ public class Pigeon : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    void SelfDestroyOnLifeTime()
+
+    void SetupBird()
     {
-        // self destruction by lifeTime parameter plus chance factor
-        timeAlive += Time.deltaTime;
-        if (expirationTime > 0f && timeAlive > expirationTime)
+        hungerRate = 1;
+        agent.speed = Random.Range(4f, 6f);
+        PigeonSpeed = agent.speed;
+        //agent.angularSpeed = Random.Range(3000, 4000);
+        agent.acceleration = PigeonSpeed * 0.8f;
+        float rand = Mathf.Floor(Random.Range(0f, 3f));
+        updateHungerBar();
+
+            //SkinnedMeshRenderer mr = GetComponentInChildren<SkinnedMeshRenderer>();
+            //mr.materials[0].mainTexture = myTexture[(int)rand];
+    }
+
+
+    // =================== searching food methods ==========================
+    void FoodSearching()
+    {
+        if (agent.isActiveAndEnabled && !agent.pathPending)
         {
-<<<<<<< HEAD
-            Debug.Log("------lifeTime----" + gameObject);
-            int moreCycles = Random.Range(0, 2);// destroy chance is 0.50 each cycle 
-            if (moreCycles == 0)
-=======
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 SetNewTarget();
                 targetReachTime = Time.realtimeSinceStartup;
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {}
+            }
+        }
+        CheckForFood();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (myState == State.WANDER || myState == State.FOUND_FOOD)
+        {
+            if (other.tag == "Food")
+            {
+                //myFood = other.GetComponent<Food>();
+                //SetState(State.FOUND_FOOD);
+                if (myFood != null && Random.Range(0,4) != 1)
+                    {
+                        var otherFoodDist = (other.transform.position - transform.position).magnitude;
+                        var myFoodDist = (myFood.transform.position - transform.position).magnitude;
+                    
+                        if(otherFoodDist < myFoodDist) myFood = other.GetComponent<Food>();
+                    }
+                else myFood = other.GetComponent<Food>();
+                agent.isStopped = false;
+                SetState(State.FOUND_FOOD);
             }
         }
 
+    }
 
-        //LOOK FOR FOUND_FOOD
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20);
+    //check for food in radius and go for it
+    void CheckForFood() {
+        /*
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 30);
         int i = 0;
         while (i < hitColliders.Length)
         {
             if (hitColliders[i].tag == "Food")
->>>>>>> parent of 38ef42e... amit&dina16-01-20
             {
-                Debug.Log("------self destroying----" + gameObject);
-                anim.SetTrigger("takeOff");
-                // FlyOut() is called through animation
+                if (myFood != null && Random.Range(0,5) != 1)
+                {
+                    var iFoodDist = (hitColliders[i].transform.position - transform.position).magnitude;
+                    var myFoodDist = (myFood.transform.position - transform.position).magnitude;
+                    
+                    if(iFoodDist < myFoodDist) myFood = hitColliders[i].GetComponent<Food>();
+                }
+                else myFood = hitColliders[i].GetComponent<Food>();
+            }
+            i++;
+        }
+        if (myFood != null)
+        {
+            agent.isStopped = false;
+            SetState(State.FOUND_FOOD);
+        }
+        */
+    }
+
+
+    
+    void SetNewTarget()
+    {
+        var standingTime = Random.Range(0f,2f);
+        
+        if (myState == State.WANDER)
+        {
+            if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+            {
+                Debug.Log("is stanting.........");
+                agent.isStopped = true;           
             }
             else
-                timeAlive = 0f; // get new life cycle
+            {
+                Debug.Log("SetNewTarget");
+                Vector2 pos = Random.insideUnitCircle * walkRadius;
+                coinDropped = false;
+                agent.isStopped = false;
+                agent.SetDestination(RandomNavmeshLocation(walkRadius));
+            }
         }
     }
 
-
-<<<<<<< HEAD
-=======
-        if (standingTime > Time.realtimeSinceStartup - targetReachTime)
-        {
-            Debug.Log("is stanting.........");
-            agent.isStopped = true;
-            if (Random.Range(0,1000) == 500) Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Debug.Log("SetNewTarget");
-            Vector2 pos = Random.insideUnitCircle * walkRadius;
-            agent.isStopped = false;
-            agent.SetDestination(PickPointOnMesh());
-        }
-       
-    }
->>>>>>> parent of 38ef42e... amit&dina16-01-20
-
-    private void NavAnimationVelocity()
+    void DropCoin()
     {
-        float velocity = agent.velocity.magnitude / agent.speed;
-        anim.SetFloat("walkSpeed", velocity);
-        // changes the type of idle if pegion wlked at avarage speed or above
-        if (velocity > 0.4f) anim.SetFloat("idleType", Random.value);
+        if (Random.Range(1, coinDropRate) == 1 && coinDropped == false)
+        {
+            var standingTime = 0.4f;
+            
+            if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+            {
+                Debug.Log("Dropping Coin.........");
+                agent.isStopped = true;
+                var newCoin = Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
+                newCoin.SetCoin(0, 1);                 
+            }
+            else
+            {
+                agent.isStopped = false;
+                agent.SetDestination(RandomNavmeshLocation(walkRadius));
+            }
+        }
     }
 
+    //Vector3 PickPointOnMesh()
+    //{
+    //    Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
+    //    randomDirection += transform.position;
+    //    NavMeshHit hit;
+    //    NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
+    //    return hit.position;
+    //}
 
-    void SetNewTarget() {
-        Debug.Log("SetNewTarget");
-        Vector2 pos = Random.insideUnitCircle * walkRadius;
-       // target.transform.position = transform.position + new Vector3(pos.x, 0, pos.y);
-        agent.SetDestination (PickPointOnMesh());
-        StartCoroutine(standing());
-        //var rand = Random.Range(0, 4);
-        //if (rand < 1) { StartCoroutine(standing()); }
-        //else if (rand < 1.2) { StartCoroutine(flapping()); }
-
-    }
-
-    IEnumerator standing()
+    public Vector3 RandomNavmeshLocation(float radius)
     {
-        //anim.SetBool("isStanding", true);
-        if (agent) agent.isStopped = true;
-        yield return new WaitForSeconds(Random.Range(1f, 3f));
-        if (agent) agent.isStopped = false;
-        //anim.SetBool("isStanding", false);
+        Vector3 randomDirection = Random.insideUnitSphere * radius;
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        Vector3 finalPosition = Vector3.zero;
+        if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))
+        {
+            finalPosition = hit.position;
+        }
+        return finalPosition;
+    }
+
+    void FoodMode()
+    {
+        if (!myFood) SetState(State.WANDER);
+        else agent.SetDestination(myFood.transform.position);
+
+        CheckForFood();
+
+        if (agent.isActiveAndEnabled && !agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                SetState(State.EATING); 
+            }
+        }
+
+        
     }
     
-    /*
-    IEnumerator flapping() {
-        //anim.SetBool("isFlapping", true);
-        if (agent) agent.isStopped = true;
-        yield return new WaitForSeconds(Random.Range(1f, 3f));
-        if (agent) agent.isStopped = false;
-        //anim.SetBool("isFlapping", false);
-    }
-    */
-
-    IEnumerator Eating() {
-       
-        if (agent) agent.isStopped = true;
-        anim.SetBool("isEating", true);
-        //myFood.Eaten() is called through animation
-        //AddEnergy() is called through animation
-        
-        yield return new WaitForSeconds(Random.Range(3f, 4f));
-
-        if (agent) agent.isStopped = false;
-        anim.SetBool("isEating", false);
-        SetState(State.IDLE);
-    }
 
 
-    #region helpers
-
-    void OnTriggerEnter(Collider col)
+    private void Eating()
     {
- 
-        Debug.Log("OnTriggerEnter" + col.gameObject.name);
+        if (!myFood)
+        {
+            anim.SetBool("isEating", false);
+            SetState(State.WANDER);
+        }
+
+        else 
+        {
+            agent.isStopped = true;
+            anim.SetBool("isEating", true);
+            // myFood.Eaten() & AddEnergy() are called through animation
+        }
     }
-
-
-
-    void OnCollisionEnter(Collision col)
-    {
-
-    }
-
-
 
     void updateHungerBar()
     {
-        hugerSlider.value = hunger;
+        {
+            //hungerRate -= hungerDeterior * Time.deltaTime;
+            hungerSlider.value = hungerRate + 0.1f;
+            agent.speed = PigeonSpeed * (2 - Mathf.Clamp(hungerRate, 0.5f, 1.5f));
+            anim.speed = 2 - (hungerRate*0.5f);
+            // transform.localScale = new Vector3 (0.3f + (0.5f * hungerRate), transform.localScale[1], transform.localScale[2]);
+            if (hungerRate < 0 && myState != State.EATING)
+            {
+                anim.speed = 1.5f;
+                SetState(State.FLY_OUT);
+            }
+        }
+        
     }
 
     public void AddEnergy()
     {
-        hunger += hungerRate * 20;
+        hungerRate += hungerDeterior * 10;
     }
 
-    Vector3 PickPointOnMesh() {
-        Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
-        randomDirection += transform.position;
-        NavMeshHit hit;
-        NavMesh.SamplePosition(randomDirection, out hit, walkRadius,1);
-        return hit.position;
 
-    }
-    #endregion
-
-
-
-
+  
 }

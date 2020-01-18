@@ -38,48 +38,52 @@ public class PlayerController : MonoBehaviour
         // Trowing Food exactly to where player clicks
         if (Input.GetMouseButtonDown(0))
         {
+            if (PlayerStats.FoodAvailable[0] > 0)
+            { 
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.transform.gameObject.tag == "PigeonGround")
+                    {
+                        Debug.Log("HIT the ground runing!" + hit.transform.name);
+                        ThrowFood(hit.point);
+                    }
+                    else if (hit.transform.tag == "Coin")
+                    {
+                        Debug.Log("HIT Capitalist!" + hit.transform.name);
+                        CoinCollected(hit.transform.gameObject);
+                    }
+                }
+            }
+        }
+
+        // right-click for collecting food
+        /*
+         * if (Input.GetMouseButtonDown(1))
+        {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 60f))
-<<<<<<< HEAD
-            {
-                if (hit.transform != null)
-                {
-                    Debug.Log("=====HIT" + hit.transform.name);
-                    if (hit.transform.name == "COIN")
-                    {
-                        PlayerStats.CoinsNum++;
-                        CoinCollected(hit.transform.gameObject);
-                    }
-                    else
-                        failAudioClip.Play(0);
-=======
             {                
                 if (hit.transform != null)
                 {
                     Debug.Log("HIT" + hit.transform.name);
                     ThrowFood(hit.point);
                     //foodClickedCntr++;
->>>>>>> parent of 38ef42e... amit&dina16-01-20
                 }
             }
         }
+        */
 
         //if (Input.GetMouseButtonDown(0)) ThrowFood();
     }
 
-<<<<<<< HEAD
-
-    void CoinCollected(GameObject go)
-    {
-        Destroy(go);
-    }
-
-
-=======
->>>>>>> parent of 38ef42e... amit&dina16-01-20
     void ThrowFood(Vector3 targetPosition)
     {
+        //PlayerStats.FoodAvailable[0]--;
+        PlayerStats.CoinsNum -= 1;
+
         Vector3 playerPos = this.transform.position;
         int CrumbAmmount = Random.Range(crumbAmountMin, crumbAmountMax);
         
@@ -87,13 +91,12 @@ public class PlayerController : MonoBehaviour
         {
             var targetPosRnd = targetPosition; // + new Vector3(Random.value*3, 0, Random.value*3);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
-            food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveY(targetPosRnd[1], 1f).From(playerPos).SetEase(Ease.InOutCubic);
+            food.transform.DOMoveX(targetPosRnd[0], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveZ(targetPosRnd[2], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveY(.5f , .5f).From(playerPos).SetEase(Ease.InOutCubic).OnComplete(food.EnableCollider);
             //food.AddForce(directionRandom * Random.Range(throwForce * 0 8f, throwForce * 1.2f));
         }
 
     }
-
-   
+       
 }
