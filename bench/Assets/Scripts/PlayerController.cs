@@ -9,21 +9,18 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     private float xRotation = 0;
-    public AudioSource failAudioClip;
-
 
 
     //==================== Feeding Members ====================
     [SerializeField] private Food foodPrefab;
     [SerializeField] private int crumbAmountMin = 5, crumbAmountMax = 15 ;
-    [SerializeField] private float throwForce = 10f;
+    //[SerializeField] private float throwForce = 10f;
 
 
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        failAudioClip = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -38,58 +35,49 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up*mouseX);
 
-        // Trowing Food exactly to where player left-clicks
+        // Trowing Food exactly to where player clicks
         if (Input.GetMouseButtonDown(0))
-        {
-            if (PlayerStats.FoodAvailable[0] > 0)
-            { 
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 60f))
-                {
-                    if (hit.transform != null)
-                    {
-                        Debug.Log("=====HIT" + hit.transform.name);
-                        ThrowFood(hit.point);
-                        PlayerStats.FoodAvailable[0]--;
-                    }
-                }
-            }
-            else
-                failAudioClip.Play(0);
-        }
-
-        // right-click for collecting food
-        if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 60f))
+<<<<<<< HEAD
+            {
+                if (hit.transform != null)
+                {
+                    Debug.Log("=====HIT" + hit.transform.name);
+                    if (hit.transform.name == "COIN")
+                    {
+                        PlayerStats.CoinsNum++;
+                        CoinCollected(hit.transform.gameObject);
+                    }
+                    else
+                        failAudioClip.Play(0);
+=======
             {                
-                if (hit.transform.tag == "Coin")
-                {                    
-                    CoinCollected(hit.transform.gameObject);
+                if (hit.transform != null)
+                {
+                    Debug.Log("HIT" + hit.transform.name);
+                    ThrowFood(hit.point);
+                    //foodClickedCntr++;
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
                 }
-                else
-                    failAudioClip.Play(0);
-              
             }
         }
-
 
         //if (Input.GetMouseButtonDown(0)) ThrowFood();
     }
 
+<<<<<<< HEAD
 
     void CoinCollected(GameObject go)
     {
-        PlayerStats.CoinsNum++; // acording to coin value
-        //Destroy(go.GetComponentInParent<Transform>().gameObject);
         Destroy(go);
-        // instantiate particles        
     }
 
 
+=======
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
     void ThrowFood(Vector3 targetPosition)
     {
         Vector3 playerPos = this.transform.position;
@@ -97,7 +85,7 @@ public class PlayerController : MonoBehaviour
         
         for (int i = 0; i < CrumbAmmount; i++)
         {
-            var targetPosRnd = targetPosition + new Vector3(Random.value*3, 0, Random.value*3);
+            var targetPosRnd = targetPosition; // + new Vector3(Random.value*3, 0, Random.value*3);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
             food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
             food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);
@@ -107,8 +95,5 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
- 
-
-
+   
 }

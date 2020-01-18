@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001d7c128a195594d914176ad1c79a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expirationTime: 0
   myTexture:
   - {fileID: 2800000, guid: 4ac9082a5633f574eb3e25c4ede825e1, type: 3}
   - {fileID: 2800000, guid: 8fdec0280c05b1949ae6899f9d030862, type: 3}
@@ -127,10 +128,8 @@ MonoBehaviour:
   targetPrefab: {fileID: 1572784492859180594, guid: b3514b60e5ee5aa4f848056a07305634,
     type: 3}
   hugerSlider: {fileID: 183517777514656022}
-  hungerDeterior: 0.05
+  hungerRate: 0.1
   myFood: {fileID: 0}
-  coinPrephab: {fileID: 1021252036690894237, guid: 27e4e860175207d418ffb71109c1ba57,
-    type: 3}
 --- !u!195 &7745799570278869022
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -141,11 +140,11 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.56
-  m_Speed: 8
-  m_Acceleration: 4
+  m_Speed: 6
+  m_Acceleration: 2.5
   avoidancePriority: 50
-  m_AngularSpeed: 500
-  m_StoppingDistance: 0.01
+  m_AngularSpeed: 250
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -469,7 +468,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.588
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -619,10 +618,6 @@ PrefabInstance:
     - target: {fileID: 400826, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 89.99988
-      objectReference: {fileID: 0}
-    - target: {fileID: 9567290, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 491770, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

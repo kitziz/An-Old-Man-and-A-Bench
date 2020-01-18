@@ -7,7 +7,6 @@ TagManager:
   - Food
   - Target
   - Pigeon
-  - Coin
   layers:
   - Default
   - TransparentFX

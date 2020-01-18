@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3643590225827083949}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Coin
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,10 +43,9 @@ GameObject:
   - component: {fileID: 7036438172475780363}
   - component: {fileID: 5393450857425378287}
   - component: {fileID: 8408259586781321891}
-  - component: {fileID: 1502292041183458144}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Coin
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +59,7 @@ Transform:
   m_GameObject: {fileID: 7337248846809900310}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 0.1, z: 1}
+  m_LocalScale: {x: 1, y: 0.15, z: 1}
   m_Children: []
   m_Father: {fileID: 3643590225827083949}
   m_RootOrder: 0
@@ -90,7 +89,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d6daac5d44453094d9926ff07a6a9d00, type: 2}
+  - {fileID: 2100000, guid: 2351d4d70f73e7541bc96c5f574aad1e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -124,22 +123,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!95 &1502292041183458144
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7337248846809900310}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a12160c58db730849b07bae6db07a1ef, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

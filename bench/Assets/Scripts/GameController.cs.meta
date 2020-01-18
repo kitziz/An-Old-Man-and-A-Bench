@@ -3,20 +3,7 @@ guid: 25956f53347f87d40b09eac36aa9823b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - pigeonPrefab: {fileID: 1885996292630469432, guid: bfea47ad425a1334c8cd0ba76d1bf9e7,
-      type: 3}
-  - foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
-      type: 3}
-  - birdsPlayground: {instanceID: 0}
-  - txtPigeons: {instanceID: 0}
-  - txtHPigeons: {instanceID: 0}
-  - txtHappy: {instanceID: 0}
-  - txtHHappy: {instanceID: 0}
-  - txtAngry: {instanceID: 0}
-  - txtHAngry: {instanceID: 0}
-  - txtCoins: {instanceID: 0}
-  - txtHCoins: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
