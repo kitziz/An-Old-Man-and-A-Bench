@@ -15,9 +15,9 @@ public class Coin : MonoBehaviour
         myMR = GetComponentInChildren<MeshRenderer>();
     }
 
-    public void SetCoin(int Color = 1, int value = 1)
+    public void SetCoin(int Color = 0, int value = 1)
     {
-        myMR.material = coinMaterial[Color];
+        //myMR.materials[0] = coinMaterial[Color];
         coinValue = value;
     }
 }

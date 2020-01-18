@@ -48,5 +48,8 @@ public class Food : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    
+    public void EnableCollider()
+    {
+        GetComponent<BoxCollider>().enabled = true;
+    }
 }

@@ -106,16 +106,12 @@ public class PlayerController : MonoBehaviour
         {
             var targetPosRnd = targetPosition + new Vector3(Random.value*3, 0, Random.value*3);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
-            food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveY(.5f , 1f).From(playerPos).SetEase(Ease.InOutCubic);
+            food.transform.DOMoveX(targetPosRnd[0], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveZ(targetPosRnd[2], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveY(.5f , .5f).From(playerPos).SetEase(Ease.InOutCubic).OnComplete(food.EnableCollider);
             //food.AddForce(directionRandom * Random.Range(throwForce * 0 8f, throwForce * 1.2f));
         }
 
     }
-
-
- 
-
-
+       
 }
