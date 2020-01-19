@@ -9,9 +9,7 @@ public class GameController : MonoBehaviour
 
     [SerializeField] static public Vector2 fieldSize = new Vector2(14, 15);
     [SerializeField] int numOfPigeons = 50;
-    [SerializeField] float foodRate = 10f;
     [SerializeField] Pigeon pigeonPrefab;
-    [SerializeField] Food foodPrefab;
     //...[SerializeField] float fieldRadius;
     [SerializeField] Transform birdsPlayground;
 
@@ -20,32 +18,22 @@ public class GameController : MonoBehaviour
 
     // player buying
     public int[] pigeonPrice = new int[] { 2, 5, 8 };
-    public int[] foodPrice = new int[] { 1, 2 };
-    public int initFood = 10;
-    public int initCoinsNum = 10;//...
+    public int initCoinsNum = 10;
     public int maxCoinsNum = 0;
     public int lastCoinsNum = 0, totalCoinsNum = 0;
     public AudioSource failAudioClip;
-
-    //public int[] foodAvailable = new int[] { 0, 0 };kept in PlayerStats.CoinsNum
-    //public int coinsNum = 0; - kept in PlayerStats.CoinsNum
-
 
     // texts on Canvas - to be dragged from hierarchy
     public GameObject txtPigeons, txtHPigeons;
     public GameObject txtHappy, txtHHappy;
     public GameObject txtAngry, txtHAngry;
     public GameObject txtCoins, txtHCoins;
-    public GameObject txtFood, txtHFood;
-
 
     // configuring adding pigeons
     public float cycleTimeNewPigeons = 0f;
     public int MaxNewPigeonsNum = 0;
 
     // configuring statistics
-    public int pigeonMinHappiness = 1;
-    public int pigeonMaxHappiness = 10;
     public float pigeonAngryAt = 0.3f;
     public float pigeonHappyAt = 0.6f;
     public float cycleTimeCalcStatistics = 0.5f;
@@ -60,24 +48,13 @@ public class GameController : MonoBehaviour
     public int pigeonStatistCreated = 0, pigeonStatistExist = 0, pigeonStatistMax = 0;
     public int pigeonStatistHappy = 0, pigeonStatistMaxH = 0;
     public int pigeonStatistAngry = 0, pigeonStatistMaxA = 0;
-    public int foodStatistCreatedPrm = 0, foodStatistCreatedNrm = 0;
-    public int lastFoodCntr=0, lastFoodClickedCntr=0, foodClickedCntr=0;
-    public int maxFood = 0;
-
-
+  
     [SerializeField] private List<Pigeon> pigeons;
 
 
-    private float timeSinceLastSpawn = 0;//food
-    private Food food;
     private float deltaTimeNewP = 0, deltaTimeCalcS = 0, deltaTimeNewCoins = 0;
     private Quaternion rotation = Quaternion.identity;
-    private int foodQuality=0;
     private Text textComponent;
-    
-
-
-
 
 
     void Start()
@@ -88,7 +65,6 @@ public class GameController : MonoBehaviour
 
         // prepare for player buying inputs
         PlayerStats.CoinsNum = initCoinsNum;
-        PlayerStats.FoodAvailable[0] = initFood;
         failAudioClip = GetComponent<AudioSource>();
 
         CalcPigeonStatistics();
@@ -113,38 +89,10 @@ public class GameController : MonoBehaviour
         {
             success = BuyPigeon(2);
         }
-        else if (Input.GetKeyDown("4"))
-        {
-            success = BuyFood(0);
-        }
-        else if (Input.GetKeyDown("5"))
-        {
-            success = BuyFood(1);
-        }
         if (!success)
         {
             failAudioClip.Play(0);
         }
-
-        // if collecting coin
-
-
-        /* food spawning moved to PlayerController script
-        if (Input.GetMouseButtonDown(0)) {
-               RaycastHit hit;
-               Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-               if (Physics.Raycast(ray, out hit, 60f))
-               {
-                   //suppose i have two objects here named obj1 and obj2.. how do i select obj1 to be transformed 
-                   if (hit.transform != null)
-                   {
-                       Debug.Log("HIT" + hit.transform.name);
-                       foodClickedCntr++;
-                       CreateFood(hit.point);
-                   }
-               }
-        }
-        */
 
         // high Coins score refers to total number ever collected
         if (PlayerStats.CoinsNum > lastCoinsNum)
@@ -155,10 +103,6 @@ public class GameController : MonoBehaviour
         if (cycleTimeCalcStatistics > 0f) TimeRecalcStatist();
         if (cycleTimeNewPigeons > 0f) TimeForMorePigeons();
         if (cycleTimeNewCoins > 0f) TimeForMoreCoins();
-
-        /* food spawning moved to PlayerController script
-        AutomaticFoodSpawnr();
-        */
     }
 
 
@@ -214,48 +158,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    //================ Food ===========================
-
-    bool BuyFood(int type)
-    {
-        if (PlayerStats.CoinsNum >= foodPrice[type])
-        {
-            PlayerStats.CoinsNum -= foodPrice[type];
-            PlayerStats.FoodAvailable[type]++;
-            return true;
-        }
-        return false;
-    }
-
-    /* food spawning moved to PlayerController script
-    void AutomaticFoodSpawner()
-    {
-    timeSinceLastSpawn += Time.deltaTime;
-
-    if (timeSinceLastSpawn > foodRate) {
-        timeSinceLastSpawn = 0;
-        Debug.Log("RESPAWN FOOD");
-
-        Vector2 pos = Random.insideUnitCircle * 30;
-        CreateFood (new Vector3(pos.x, 1f, pos.y));
-    }
-    }
-    void CreateFood(Vector3 pos) {
-
-    food = Instantiate(foodPrefab, pos, Quaternion.identity, transform);
-    //   called before with birdsPlayground instead of transformed - but was not active
-    //   rb.velocity = Vector3.zero;
-
-    if (foodQuality > 0)
-        foodStatistCreatedPrm++;
-    else
-        foodStatistCreatedNrm++;
-
-    }
-    */
-
-
-
+   
     //==========================  data & scores (statistics) ================================
 
     void TimeRecalcStatist()
@@ -282,7 +185,7 @@ public class GameController : MonoBehaviour
     void TimeForMoreCoins()
     {
         deltaTimeNewCoins += Time.deltaTime;
-        if (deltaTimeNewCoins > cycleTimeNewCoins)
+        if (deltaTimeNewCoins > cycleTimeNewCoins && cycleTimeNewCoins > 0)
         {
             deltaTimeNewCoins = 0f;
 
@@ -306,8 +209,6 @@ public class GameController : MonoBehaviour
                     }
                 }
             }
-            lastFoodClickedCntr = foodClickedCntr;
-            Debug.Log("food " + lastFoodCntr);
         }
     }
 
@@ -365,11 +266,6 @@ public class GameController : MonoBehaviour
         UpdateSingleText(txtHAngry, pigeonStatistMaxA);
         UpdateSingleText(txtCoins, PlayerStats.CoinsNum);
         UpdateSingleText(txtHCoins, totalCoinsNum);// high score for coins refers to total number ever collected
-        UpdateSingleText(txtFood, PlayerStats.FoodAvailable[0]);
-        if (PlayerStats.FoodAvailable[0] > maxFood)
-            maxFood = PlayerStats.FoodAvailable[0];
-        UpdateSingleText(txtHFood, maxFood);
-
     }
 
 
