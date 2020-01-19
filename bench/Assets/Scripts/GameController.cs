@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour
     public int initFood = 10;
     public int initCoinsNum = 10;//...
     public int maxCoinsNum = 0;
+    public int lastCoinsNum = 0, totalCoinsNum = 0;
     public AudioSource failAudioClip;
 
     //public int[] foodAvailable = new int[] { 0, 0 };kept in PlayerStats.CoinsNum
@@ -144,6 +145,12 @@ public class GameController : MonoBehaviour
                }
         }
         */
+
+        // high Coins score refers to total number ever collected
+        if (PlayerStats.CoinsNum > lastCoinsNum)
+            totalCoinsNum += PlayerStats.CoinsNum - lastCoinsNum;
+        lastCoinsNum = PlayerStats.CoinsNum;
+
 
         if (cycleTimeCalcStatistics > 0f) TimeRecalcStatist();
         if (cycleTimeNewPigeons > 0f) TimeForMorePigeons();
@@ -357,13 +364,11 @@ public class GameController : MonoBehaviour
         UpdateSingleText(txtAngry, pigeonStatistAngry);
         UpdateSingleText(txtHAngry, pigeonStatistMaxA);
         UpdateSingleText(txtCoins, PlayerStats.CoinsNum);
-        if (PlayerStats.CoinsNum > maxCoinsNum)
-           maxCoinsNum = PlayerStats.CoinsNum;
-        UpdateSingleText(txtHCoins, maxCoinsNum);
+        UpdateSingleText(txtHCoins, totalCoinsNum);// high score for coins refers to total number ever collected
         UpdateSingleText(txtFood, PlayerStats.FoodAvailable[0]);
         if (PlayerStats.FoodAvailable[0] > maxFood)
             maxFood = PlayerStats.FoodAvailable[0];
-        UpdateSingleText(txtHCoins, maxFood);
+        UpdateSingleText(txtHFood, maxFood);
 
     }
 
