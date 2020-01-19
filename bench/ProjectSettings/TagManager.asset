@@ -9,6 +9,10 @@ TagManager:
   - Pigeon
   - Coin
   - PigeonGround
+  - Coin0
+  - Coin1
+  - Coin2
+  - Coin3
   layers:
   - Default
   - TransparentFX

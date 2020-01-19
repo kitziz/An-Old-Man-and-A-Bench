@@ -7,17 +7,43 @@ public class Coin : MonoBehaviour
 
     MeshRenderer myMR;
     public Material[] coinMaterial;
-    public int coinValue = 1;
 
     // Start is called before the first frame update
     void Start()
     {
+        int ind=0;
+
         myMR = GetComponentInChildren<MeshRenderer>();
+
+        for (int i = 0; i < coinMaterial.Length; i++)
+        {
+            if (gameObject.tag.Contains(i.ToString()))
+            {
+                ind = i;
+            }
+        }
+        myMR.material = coinMaterial[ind];
+        Debug.Log("============init Coin MR: "+ind+" "+ myMR.material + this.tag);
     }
 
-    public void SetCoin(int Color = 1, int value = 1)
+    void Update()
     {
-        myMR.material = coinMaterial[Color];
-        coinValue = value;
+
     }
+
+
+    /* logic replaced
+    public void SetCoinType(int color = 0)
+    {
+        Debug.Log("============set Coin MR " + myMR + " " + this.name + " " + color + " " +  coinMaterial[color]);
+        coinColor = color;
+        updateColor = true;
+    }
+
+    public int GetCoinType()
+    {
+        return coinColor;
+    }
+    */
+
 }

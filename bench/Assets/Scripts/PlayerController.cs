@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour
     //=============== Camera Orientation Members ===============
     public float mouseSensitivity = 100f;
     public Transform playerBody;
-    private float xRotation = 0;
     public AudioSource failAudioClip;
 
+    private float xRotation = 0;
 
 
     //==================== Feeding Members ====================
@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int crumbAmountMin = 5, crumbAmountMax = 15 ;
     [SerializeField] private float throwForce = 10f;
 
+    //==================== Coins ===============================
+    public int[] coinValues = new int[] { 2, 5, 10, 15 }; // according to colors array defined in coin class
 
 
     void Start()
@@ -41,53 +43,41 @@ public class PlayerController : MonoBehaviour
         // Trowing Food exactly to where player left-clicks
         if (Input.GetMouseButtonDown(0))
         {
-            if (PlayerStats.FoodAvailable[0] > 0)
-            { 
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.transform.gameObject.tag == "PigeonGround")
-                    {
-                        Debug.Log("HIT the ground runing!" + hit.transform.name);
-                        ThrowFood(hit.point);
-                    }
-                    else if (hit.transform.tag == "Coin")
-                    {
-                        Debug.Log("HIT Capitalist!" + hit.transform.name);
-                        CoinCollected(hit.transform.gameObject);
-                    }
-                }
-            }
-        }
-
-        // right-click for collecting food
-        /*
-         * if (Input.GetMouseButtonDown(1))
-        {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 60f))
-            {                
-                if (hit.transform.tag == "Coin")
-                {                    
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.gameObject.tag == "PigeonGround")
+                {
+                    if (PlayerStats.CoinsNum > 0)
+                    {
+                        Debug.Log("HIT the ground runing!" + hit.transform.name);
+                        PlayerStats.CoinsNum --;
+
+                        ThrowFood(hit.point);
+                    }
+                }
+                else if (hit.transform.gameObject.tag.Contains("Coin"))
+                {
+                    Debug.Log("HIT Capitalist!" + hit.transform.name);
                     CoinCollected(hit.transform.gameObject);
                 }
-                else
-                    failAudioClip.Play(0);
-              
             }
         }
-        */
-
-
-        //if (Input.GetMouseButtonDown(0)) ThrowFood();
     }
 
 
     void CoinCollected(GameObject go)
     {
-        PlayerStats.CoinsNum++; // acording to coin value
+        int typeIndex = 0;
+
+        for (int i = 0; i < coinValues.Length; i++)
+        {
+            if (go.tag.Contains(i.ToString()))
+                typeIndex = i;
+        }
+        PlayerStats.CoinsNum += coinValues[typeIndex];
+
         //Destroy(go.GetComponentInParent<Transform>().gameObject);
         Destroy(go);
         // instantiate particles        
@@ -96,9 +86,6 @@ public class PlayerController : MonoBehaviour
 
     void ThrowFood(Vector3 targetPosition)
     {
-        //PlayerStats.FoodAvailable[0]--;
-        PlayerStats.CoinsNum -= 1;
-
         Vector3 playerPos = this.transform.position;
         int CrumbAmmount = Random.Range(crumbAmountMin, crumbAmountMax);
         
@@ -106,16 +93,11 @@ public class PlayerController : MonoBehaviour
         {
             var targetPosRnd = targetPosition + new Vector3(Random.value*3, 0, Random.value*3);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
-            food.transform.DOMoveX(targetPosRnd[0], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveZ(targetPosRnd[2], 1f).From(playerPos).SetEase(Ease.OutSine);
-            food.transform.DOMoveY(.5f , 1f).From(playerPos).SetEase(Ease.InOutCubic);
+            food.transform.DOMoveX(targetPosRnd[0], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveZ(targetPosRnd[2], .5f).From(playerPos).SetEase(Ease.OutSine);
+            food.transform.DOMoveY(.5f , .5f).From(playerPos).SetEase(Ease.InOutCubic).OnComplete(food.EnableCollider);
             //food.AddForce(directionRandom * Random.Range(throwForce * 0 8f, throwForce * 1.2f));
         }
-
     }
-
-
- 
-
-
+       
 }
