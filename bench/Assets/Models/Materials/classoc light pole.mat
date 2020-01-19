@@ -62,9 +62,15 @@ Material:
     - _DstBlend: 0
     - _GlossMapScale: 1
 <<<<<<< HEAD
+<<<<<<< HEAD
     - _Glossiness: 0.64
     - _GlossyReflections: 1
     - _Metallic: 0.308
+=======
+    - _Glossiness: 0.57
+    - _GlossyReflections: 1
+    - _Metallic: 0.67
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
 =======
     - _Glossiness: 0.57
     - _GlossyReflections: 1
@@ -80,7 +86,11 @@ Material:
     - _ZWrite: 1
     m_Colors:
 <<<<<<< HEAD
+<<<<<<< HEAD
     - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 1}
+=======
+    - _Color: {r: 0.9887359, g: 1, b: 0, a: 1}
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
 =======
     - _Color: {r: 0.9887359, g: 1, b: 0, a: 1}
 >>>>>>> parent of 38ef42e... amit&dina16-01-20

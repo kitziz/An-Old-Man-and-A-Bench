@@ -60,6 +60,9 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("HIT" + hit.transform.name);
                     ThrowFood(hit.point);
                     //foodClickedCntr++;
+<<<<<<< HEAD
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
+=======
 >>>>>>> parent of 38ef42e... amit&dina16-01-20
                 }
             }
@@ -69,6 +72,7 @@ public class PlayerController : MonoBehaviour
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     void CoinCollected(GameObject go)
     {
@@ -76,6 +80,8 @@ public class PlayerController : MonoBehaviour
     }
 
 
+=======
+>>>>>>> parent of 38ef42e... amit&dina16-01-20
 =======
 >>>>>>> parent of 38ef42e... amit&dina16-01-20
     void ThrowFood(Vector3 targetPosition)
