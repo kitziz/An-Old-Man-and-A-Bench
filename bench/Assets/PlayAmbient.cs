@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PigeonBar : MonoBehaviour
+public class PlayAmbient : MonoBehaviour
 {
 
-    private Camera camera;
+    [SerializeField] AudioClip ambiant;
     // Start is called before the first frame update
     void Start()
     {
-        camera = Camera.main;
+        SoundManager.instance.PlaySingle(ambiant);
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-
-    //    transform.LookAt(transform.position + camera.transform.rotation * Vector3.back, camera.transform.rotation * Vector3.up);
+        
     }
 }
