@@ -12,6 +12,9 @@ public class Pigeon : MonoBehaviour
     [SerializeField] private GameObject targetPrefab;       // a "null" taget prefab for the navmesh agent
     [SerializeField] private Slider hungerSlider;            // a canvas that visulizes Hanger Rate
     [SerializeField] private float hungerDeterior = 0.01f;  // Hanger deterioration per sec
+    [SerializeField] private float coinStandingTime = 0.4f;
+    [SerializeField] private float coinMinHungerRate = 0.3f;
+
 
     // navigation members
     private NavMeshAgent agent;
@@ -23,10 +26,10 @@ public class Pigeon : MonoBehaviour
     // related assets 
     public Food myFood; //current food to go to
     public Coin coinPrephab;
-    public int coinDropRate = 1000; // a random chance of droping coins while searching food
-    public int [] coinTypeRates = new int[] { 0, 10, 50, 100 }; // a random chance of droping coins while searching food
+    //public int coinDropRate = 1000; // a random chance of droping coins while searching food
+    public int [] coinTypeRates = new int[] { 10, 20, 50, 100 }; // a random chance of droping coins while searching food
     private bool coinDropped = true; // prevents multiple coin drops at once
-    
+
 
     // various rates & measurments
     private float timeSiceLastSpawn;
@@ -267,12 +270,12 @@ public class Pigeon : MonoBehaviour
         {
             if (standingTime > Time.realtimeSinceStartup - targetReachTime)
             {
-                Debug.Log("is stanting.........");
+                //Debug.Log("is stanting.........");
                 agent.isStopped = true;           
             }
             else
             {
-                Debug.Log("SetNewTarget");
+                //Debug.Log("SetNewTarget");
                 Vector2 pos = Random.insideUnitCircle * walkRadius;
                 coinDropped = false;
                 agent.isStopped = false;
@@ -285,12 +288,11 @@ public class Pigeon : MonoBehaviour
     {
 
 
-        if (Random.Range(1, coinDropRate) == 1 && coinDropped == false)
+        if (Random.Range(1, coinTypeRates[0]) == 1 && coinDropped == false)
         {
 
-
-            var standingTime = 0.4f;
-            if (standingTime > Time.realtimeSinceStartup - targetReachTime)
+            if (coinStandingTime > Time.realtimeSinceStartup - targetReachTime &&
+                (hungerRate > coinMinHungerRate))
             {
 
                 // random timing for a coin of any type
@@ -303,14 +305,11 @@ public class Pigeon : MonoBehaviour
                     if (Random.Range(1, coinTypeRates[i]) == 1)
                     {
                         typeI = i;
-                        Debug.Log("Coin" + typeI+ "|"+ typeI+"|");
                     }
                 }
 
                 Coin newCoin = Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
                 newCoin.tag = "Coin" + typeI; // tag will define the variation in material (Coin class) and value (Player class)
-                Debug.Log("==============Dropping coin tag: " + typeI + " " + newCoin.tag + " " + newCoin);
-
 
                 /* replaced
                 var newCoin = Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
@@ -319,6 +318,7 @@ public class Pigeon : MonoBehaviour
 
                 agent.isStopped = true;
                 coinDropped = true;
+              
             }
             else
             {

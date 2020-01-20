@@ -5801,6 +5801,8 @@ RectTransform:
   - {fileID: 1723581279}
   - {fileID: 2021173593}
   - {fileID: 2058981113}
+  - {fileID: 1411573369}
+  - {fileID: 840831754}
   m_Father: {fileID: 5413206568883420301}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9736,6 +9738,83 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1860526911}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &840831751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 840831754}
+  - component: {fileID: 840831753}
+  - component: {fileID: 840831752}
+  m_Layer: 5
+  m_Name: lvl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &840831752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840831751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 3
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 1
+--- !u!222 &840831753
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840831751}
+  m_CullTransparentMesh: 0
+--- !u!224 &840831754
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840831751}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 566064512}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -270, y: 200}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &846894913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14475,15 +14554,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numOfPigeons: 2
-  foodRate: 3
   pigeonPrefab: {fileID: 1885996292630469432, guid: bfea47ad425a1334c8cd0ba76d1bf9e7,
-    type: 3}
-  foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
     type: 3}
   birdsPlayground: {fileID: 1559935920}
   pigeonPrice: 020000000500000008000000
-  foodPrice: 0100000002000000
-  initFood: 10
   initCoinsNum: 10
   maxCoinsNum: 0
   lastCoinsNum: 0
@@ -14497,12 +14571,7 @@ MonoBehaviour:
   txtHAngry: {fileID: 5413206569712852646}
   txtCoins: {fileID: 2021173592}
   txtHCoins: {fileID: 2058981112}
-  txtFood: {fileID: 5413206569239809525}
-  txtHFood: {fileID: 5413206569097323501}
-  cycleTimeNewPigeons: 15
-  MaxNewPigeonsNum: 1
-  pigeonMinHappiness: 0
-  pigeonMaxHappiness: 10
+  txtlvl: {fileID: 840831751}
   pigeonAngryAt: 0.3
   pigeonHappyAt: 0.7
   cycleTimeCalcStatistics: 1
@@ -14516,12 +14585,19 @@ MonoBehaviour:
   pigeonStatistMaxH: 0
   pigeonStatistAngry: 0
   pigeonStatistMaxA: 0
-  foodStatistCreatedPrm: 0
-  foodStatistCreatedNrm: 0
-  lastFoodCntr: 0
-  lastFoodClickedCntr: 0
-  foodClickedCntr: 0
-  maxFood: 0
+  lvlTrnsPigeonExists: 04000000050000000a000000
+  lvlTrnsPigeonHappy: 030000000400000005000000
+  lvlTrnsTimeSinceStart:
+  - 120
+  - 300
+  - 600
+  lvlTimeNewPigeons:
+  - 20
+  - 10
+  - 10
+  - 8
+  lvlMaxNewPigeonsNum: 03000000080000000c00000019000000
+  lvlCurrent: 0
   pigeons: []
 --- !u!4 &1211332352
 Transform:
@@ -16616,6 +16692,83 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1735442389}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1411573368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1411573369}
+  - component: {fileID: 1411573371}
+  - component: {fileID: 1411573370}
+  m_Layer: 5
+  m_Name: lvlLabel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1411573369
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411573368}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 566064512}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -310, y: 200}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1411573370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411573368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 3
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Level
+--- !u!222 &1411573371
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411573368}
+  m_CullTransparentMesh: 0
 --- !u!4 &1415930166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 445910, guid: c63ea781a273235439e583799176c846,

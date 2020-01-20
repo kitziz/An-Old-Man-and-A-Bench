@@ -149,12 +149,13 @@ MonoBehaviour:
   targetPrefab: {fileID: 1572784492859180594, guid: b3514b60e5ee5aa4f848056a07305634,
     type: 3}
   hungerSlider: {fileID: 0}
-  hungerDeterior: 0.1
+  hungerDeterior: 0.08
+  coinStandingTime: 0.4
+  coinMinHungerRate: 0.3
   myFood: {fileID: 0}
   coinPrephab: {fileID: 114567847008574294, guid: 27e4e860175207d418ffb71109c1ba57,
     type: 3}
-  coinDropRate: 50
-  coinTypeRates: 0000000003000000050000000a000000
+  coinTypeRates: 320000000a000000140000001e000000
 --- !u!135 &4291382566967742869
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -546,6 +547,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2662433666593753882}
     m_Modifications:
+    - target: {fileID: 194252, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
+      propertyPath: m_Name
+      value: Pigeon_PBR
+      objectReference: {fileID: 0}
+    - target: {fileID: 194252, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 449556, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -601,14 +610,6 @@ PrefabInstance:
     - target: {fileID: 449556, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 194252, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
-      propertyPath: m_Name
-      value: Pigeon_PBR
-      objectReference: {fileID: 0}
-    - target: {fileID: 194252, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
-      propertyPath: m_Layer
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 492262, guid: 04da0ec322dd17e4ab2182b90eea4b79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

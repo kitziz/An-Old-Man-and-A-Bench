@@ -28,17 +28,14 @@ public class GameController : MonoBehaviour
     public GameObject txtHappy, txtHHappy;
     public GameObject txtAngry, txtHAngry;
     public GameObject txtCoins, txtHCoins;
+    public GameObject txtlvl;
 
-    // configuring adding pigeons
-    public float cycleTimeNewPigeons = 0f;
-    public int MaxNewPigeonsNum = 0;
 
     // configuring statistics
     public float pigeonAngryAt = 0.3f;
     public float pigeonHappyAt = 0.6f;
     public float cycleTimeCalcStatistics = 0.5f;
 
-    //configuring adding coins 
     //configuring adding coins 
     public float coinGrntAtHappyRate = 0.7f; //pigeons happy devided by their number 
     public float coinLostAtAngryRate = 0.5f; // pigeons angry divided by exist - loose coins
@@ -48,13 +45,22 @@ public class GameController : MonoBehaviour
     public int pigeonStatistCreated = 0, pigeonStatistExist = 0, pigeonStatistMax = 0;
     public int pigeonStatistHappy = 0, pigeonStatistMaxH = 0;
     public int pigeonStatistAngry = 0, pigeonStatistMaxA = 0;
-  
-    [SerializeField] private List<Pigeon> pigeons;
 
+    // Pseudo Level - 3 transitions for 4 levels (all arrays should be of same Length)
+    public int[] lvlTrnsPigeonExists= new int[] { 4, 5, 10};
+    public int[] lvlTrnsPigeonHappy = new int[] { 3, 4, 5};
+    public float[] lvlTrnsTimeSinceStart = new float [] { 120f, 300f, 600f};
+    // configuring adding pigeons - for each level 0-3. arrays are thus 1 longer then the ones above
+    public float[] lvlTimeNewPigeons = new float[] { 15f, 10f, 10f, 8f};
+    public int[] lvlMaxNewPigeonsNum = new int[] { 3, 8, 12, 25};
+
+    [SerializeField] int lvlCurrent; // 0 to the length of PigeonExists[]
 
     private float deltaTimeNewP = 0, deltaTimeCalcS = 0, deltaTimeNewCoins = 0;
     private Quaternion rotation = Quaternion.identity;
     private Text textComponent;
+
+    [SerializeField] private List<Pigeon> pigeons;
 
 
     void Start()
@@ -67,6 +73,8 @@ public class GameController : MonoBehaviour
         PlayerStats.CoinsNum = initCoinsNum;
         failAudioClip = GetComponent<AudioSource>();
 
+        lvlCurrent = 0;
+        UiLvlEnter(lvlCurrent);
         CalcPigeonStatistics();
     }
 
@@ -101,7 +109,7 @@ public class GameController : MonoBehaviour
 
 
         if (cycleTimeCalcStatistics > 0f) TimeRecalcStatist();
-        if (cycleTimeNewPigeons > 0f) TimeForMorePigeons();
+        TimeForMorePigeons();
         if (cycleTimeNewCoins > 0f) TimeForMoreCoins();
     }
 
@@ -147,14 +155,18 @@ public class GameController : MonoBehaviour
 
     void TimeForMorePigeons()
     {
-        deltaTimeNewP += Time.deltaTime;
-        if (cycleTimeNewPigeons > 0f && deltaTimeNewP > cycleTimeNewPigeons)
+        if (lvlCurrent < lvlTimeNewPigeons.Length)
         {
-            deltaTimeNewP = 0f;
-            int num = Random.Range(1, MaxNewPigeonsNum);
+            deltaTimeNewP += Time.deltaTime;
+            if (lvlTimeNewPigeons[lvlCurrent] > 0f && deltaTimeNewP > lvlTimeNewPigeons[lvlCurrent])
+            {
+                deltaTimeNewP = 0f;
+                int num = Random.Range(1, lvlMaxNewPigeonsNum[lvlCurrent]);
 
-            SpawnPigeons(num);
+                SpawnPigeons(num);
+            }
         }
+        else Debug.Log("error in level config array parameters:"+lvlCurrent+" "+ lvlTimeNewPigeons.Length);
     }
 
 
@@ -251,9 +263,50 @@ public class GameController : MonoBehaviour
             pigeonStatistMaxA = pigeonStatistAngry;
 
 
+        CalcLvl();// pseudo levels: UI messages and more intense automation
+
+
         // UI scores
         UpdateTexts();
     }
+
+
+    // Pseudo levels by acheivments: UI messages and more intense automation
+    void CalcLvl()
+    {
+        bool isPigeonExistsUp = false, isPigeonHappyUp = false, isTimeUp = false;
+
+
+        if (lvlCurrent < lvlTrnsPigeonExists.Length)
+        {
+            //  higher Level exists, now check conditions to move up
+
+            if ((lvlTrnsPigeonExists[lvlCurrent] > 0) &&
+                    (pigeonStatistExist >= lvlTrnsPigeonExists[lvlCurrent]))
+            {
+                isPigeonExistsUp = true;
+            }
+            if ((lvlTrnsPigeonHappy[lvlCurrent] > 0) &&
+                   (pigeonStatistHappy >= lvlTrnsPigeonHappy[lvlCurrent]))
+            {
+                isPigeonHappyUp = true;
+            }
+            if ((lvlTrnsTimeSinceStart[lvlCurrent] > 0) &&
+                    (Time.time >= lvlTrnsTimeSinceStart[lvlCurrent]))
+            {
+                isTimeUp = true;
+            }
+
+
+            if (isPigeonExistsUp || isPigeonHappyUp || isTimeUp)
+            {
+                // reaching at list one of the barriers to next pseudo level
+                lvlCurrent++;
+                UiLvlEnter(lvlCurrent, isPigeonExistsUp, isPigeonHappyUp, isTimeUp, pigeonStatistExist, pigeonStatistHappy);
+            }
+        }
+    }
+
 
 
     public void UpdateTexts()
@@ -266,6 +319,8 @@ public class GameController : MonoBehaviour
         UpdateSingleText(txtHAngry, pigeonStatistMaxA);
         UpdateSingleText(txtCoins, PlayerStats.CoinsNum);
         UpdateSingleText(txtHCoins, totalCoinsNum);// high score for coins refers to total number ever collected
+        UpdateSingleText(txtlvl, lvlCurrent+1);
+
     }
 
 
@@ -284,6 +339,19 @@ public class GameController : MonoBehaviour
             return hugerSlider.value;
         }
         else return 0f;
+    }
+
+
+
+    //=================   Pseudo Levels by Encouragment Messages ================
+
+    void UiLvlEnter ( int newLvl, bool isPigeonExists=false, bool isPigeonHappy = false, bool isTime = false, 
+                    int pigeonNum = 0, int happyNum = 0)
+    {
+        // newLvl is 0 at game start
+        // booleans true indicating cause for level up - possibly more then one are true
+        Debug.Log("YYYYYYYYYYYYYYYYYYYYYYY    NEW LEVEL "+ newLvl+" "+ isPigeonExists + " " + isPigeonHappy + " " + isTime
+                    + " " + pigeonNum + " " + happyNum );
     }
 
 
