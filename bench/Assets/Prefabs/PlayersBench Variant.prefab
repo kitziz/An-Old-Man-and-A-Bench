@@ -147,7 +147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450904944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76b5ec6153a1d55438228df10fe66844, type: 3}
   m_Name: 
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450904944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 646b5bc27a658f447b1d929fd5ffbd70, type: 3}
   m_Name: 
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   intensity: 0.238
-  chromaticAberration: 0.1
+  chromaticAberration: 0.05
   axialAberration: 0.5
   blur: 0.2
   blurSpread: 0.15
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450904944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fceaeb339b971b429c4cc600acabd13, type: 3}
   m_Name: 
@@ -473,7 +473,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  saturation: 0.78
+  saturation: 0.65
   selectiveCc: 0
   selectiveFromColor: {r: 1, g: 1, b: 1, a: 1}
   selectiveToColor: {r: 1, g: 1, b: 1, a: 1}
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450904944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd70d448b18cfbc46af26466f752332c, type: 3}
   m_Name: 
@@ -527,12 +527,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6096e4557bae645a809cff388875cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 10
+  mouseSensitivity: 40
   playerBody: {fileID: 262130409}
+  failAudioClip: {fileID: 0}
   foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
     type: 3}
-  crumbAmountMin: 1
-  crumbAmountMax: 1
+  crumbAmountMin: 2
+  crumbAmountMax: 5
+  throwForce: 10
+  coinValues: 02000000050000000a0000000f000000
 --- !u!1 &1808038044
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +563,7 @@ Transform:
   m_GameObject: {fileID: 1808038044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.41}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_Children: []
   m_Father: {fileID: 1450904957}
   m_RootOrder: 0
@@ -661,7 +664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1e5759653e3e75643b3f3fa8bd00397f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.7
+      value: -20.674915
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1e5759653e3e75643b3f3fa8bd00397f, type: 3}
       propertyPath: m_LocalPosition.y

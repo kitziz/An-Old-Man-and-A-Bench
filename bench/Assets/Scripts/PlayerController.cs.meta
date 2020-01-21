@@ -3,7 +3,12 @@ guid: bb6096e4557bae645a809cff388875cb
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerBody: {instanceID: 0}
+  - failAudioClip: {instanceID: 0}
+  - coin: {fileID: 114567847008574294, guid: 27e4e860175207d418ffb71109c1ba57, type: 3}
+  - foodPrefab: {fileID: 1563269885235246953, guid: 3d59131b3267ebf4cba528c11a7ab8d4,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

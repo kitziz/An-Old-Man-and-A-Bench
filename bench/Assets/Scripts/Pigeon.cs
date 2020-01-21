@@ -26,13 +26,14 @@ public class Pigeon : MonoBehaviour
     // related assets 
     public Food myFood; //current food to go to
     public Coin coinPrephab;
+    public ParticleSystem HeartParticles;
     //public int coinDropRate = 1000; // a random chance of droping coins while searching food
     public int [] coinTypeRates = new int[] { 10, 20, 50, 100 }; // a random chance of droping coins while searching food
     private bool coinDropped = true; // prevents multiple coin drops at once
 
 
     // various rates & measurments
-    private float timeSiceLastSpawn;
+    private float LandingTime;
     private float hungerRate;
     
     
@@ -63,6 +64,7 @@ public class Pigeon : MonoBehaviour
     {
         hungerRate = Mathf.Clamp(hungerRate, -0.5f, 1.2f);
         NavAnimationVelocity();
+        LoveYou();
 
         switch (myState) {
             case State.FLY_IN:
@@ -156,6 +158,7 @@ public class Pigeon : MonoBehaviour
     {
         SetState(State.WANDER);
         targetReachTime = Time.realtimeSinceStartup;
+        LandingTime = Time.realtimeSinceStartup;
     }
 
     public void FlyOut()
@@ -264,7 +267,7 @@ public class Pigeon : MonoBehaviour
     
     void SetNewTarget()
     {
-        var standingTime = Random.Range(0f,2f);
+        var standingTime = Random.Range(0.01f,2f);
         
         if (myState == State.WANDER)
         {
@@ -308,7 +311,7 @@ public class Pigeon : MonoBehaviour
                     }
                 }
 
-                Coin newCoin = Instantiate(coinPrephab, this.transform.position, Quaternion.identity);
+                Coin newCoin = Instantiate(coinPrephab, transform.position, Quaternion.identity);
                 newCoin.tag = "Coin" + typeI; // tag will define the variation in material (Coin class) and value (Player class)
 
                 /* replaced
@@ -408,6 +411,19 @@ public class Pigeon : MonoBehaviour
         hungerRate += hungerDeterior * 10;
     }
 
+    void LoveYou()
+    {
+        if ((Time.realtimeSinceStartup - LandingTime) % 60 < 50)
+        {
+            HeartParticles.gameObject.SetActive(false);            
+        }
+        if ((Time.realtimeSinceStartup - LandingTime) % 60 > 50)
+        {
+            Debug.Log("HeartParticles All Around US HEARTS");
+            HeartParticles.gameObject.SetActive(true);
+        }
+    }
 
-  
+
+
 }

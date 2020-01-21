@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class Coin : MonoBehaviour
 {
 
+    public Animator anim;
     MeshRenderer myMR;
     public Material[] coinMaterial;
+    public bool fade = false;
+    public bool destroy = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,22 +33,11 @@ public class Coin : MonoBehaviour
 
     void Update()
     {
-
+                if (destroy == true) Destroy(this.gameObject);
     }
 
-
-    /* logic replaced
-    public void SetCoinType(int color = 0)
+    void FadeOut()
     {
-        Debug.Log("============set Coin MR " + myMR + " " + this.name + " " + color + " " +  coinMaterial[color]);
-        coinColor = color;
-        updateColor = true;
+        myMR.material.DOFade(0, 1f);
     }
-
-    public int GetCoinType()
-    {
-        return coinColor;
-    }
-    */
-
 }

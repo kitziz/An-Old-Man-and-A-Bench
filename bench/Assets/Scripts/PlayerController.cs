@@ -52,35 +52,32 @@ public class PlayerController : MonoBehaviour
                     if (PlayerStats.CoinsNum > 0)
                     {
                         Debug.Log("HIT the ground runing!" + hit.transform.name);
-                        PlayerStats.CoinsNum --;
-
                         ThrowFood(hit.point);
                     }
                 }
                 else if (hit.transform.gameObject.tag.Contains("Coin"))
                 {
                     Debug.Log("HIT Capitalist!" + hit.transform.name);
-                    CoinCollected(hit.transform.gameObject);
+                    CoinCollected(hit.transform.GetComponent<Coin>());
                 }
             }
         }
     }
 
 
-    void CoinCollected(GameObject go)
+    void CoinCollected(Coin coin)
     {
         int typeIndex = 0;
 
         for (int i = 0; i < coinValues.Length; i++)
         {
-            if (go.tag.Contains(i.ToString()))
+            if (coin.tag.Contains(i.ToString()))
                 typeIndex = i;
         }
         PlayerStats.CoinsNum += coinValues[typeIndex];
 
-        //Destroy(go.GetComponentInParent<Transform>().gameObject);
-        Destroy(go);
-        // instantiate particles        
+        coin.anim.SetTrigger("Picked");
+
     }
 
 
@@ -91,7 +88,9 @@ public class PlayerController : MonoBehaviour
         
         for (int i = 0; i < CrumbAmmount; i++)
         {
-            var targetPosRnd = targetPosition + new Vector3(Random.value*3, 0, Random.value*3);
+            PlayerStats.CoinsNum--;
+            var posRnd = new Vector3(Random.value * 3, 0, Random.value * 3);
+            var targetPosRnd = targetPosition + (posRnd - posRnd * 1.5f);
             var food = Instantiate(foodPrefab, playerPos, Quaternion.identity);
             food.transform.DOMoveX(targetPosRnd[0], .5f).From(playerPos).SetEase(Ease.OutSine);
             food.transform.DOMoveZ(targetPosRnd[2], .5f).From(playerPos).SetEase(Ease.OutSine);

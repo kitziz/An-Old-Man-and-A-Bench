@@ -13,6 +13,7 @@ TagManager:
   - Coin1
   - Coin2
   - Coin3
+  - Crown
   layers:
   - Default
   - TransparentFX

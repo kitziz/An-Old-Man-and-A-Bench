@@ -3,7 +3,12 @@ guid: 001d7c128a195594d914176ad1c79a04
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - targetPrefab: {instanceID: 0}
+  - hungerSlider: {instanceID: 0}
+  - myFood: {instanceID: 0}
+  - coinPrephab: {fileID: 114567847008574294, guid: 27e4e860175207d418ffb71109c1ba57,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
