@@ -350,8 +350,7 @@ public class GameController : MonoBehaviour
     {
         // newLvl is 0 at game start
         // booleans true indicating cause for level up - possibly more then one are true
-        Debug.Log("YYYYYYYYYYYYYYYYYYYYYYY    NEW LEVEL "+ newLvl+" "+ isPigeonExists + " " + isPigeonHappy + " " + isTime
-                    + " " + pigeonNum + " " + happyNum );
+        //Debug.Log("YYYYYYYYYYYYYYYYYYYYYYY    NEW LEVEL "+ newLvl+" "+ isPigeonExists + " " + isPigeonHappy + " " + isTime + " " + pigeonNum + " " + happyNum );
     }
 
 

@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (PlayerStats.CoinsNum > 0)
                     {
-                        Debug.Log("HIT the ground runing!" + hit.transform.name);
+                        //Debug.Log("HIT the ground runing!" + hit.transform.name);
                         ThrowFood(hit.point);
                     }
                 }

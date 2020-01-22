@@ -24,6 +24,7 @@ public class Pigeon : MonoBehaviour
     private float PigeonSpeed; // remebers original agent.speed and caculate relative speeds
 
     // related assets 
+    [SerializeField] private List<Food> foodCrumbs;
     public Food myFood; //current food to go to
     public Coin coinPrephab;
     public ParticleSystem HeartParticles;
@@ -46,10 +47,11 @@ public class Pigeon : MonoBehaviour
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();     
+        agent = GetComponent<NavMeshAgent>();
         hungerSlider = GetComponentInChildren<Slider>();
         anim = GetComponentInChildren<Animator>();
         target = Instantiate(targetPrefab, Vector3.zero, Quaternion.identity);
+        foodCrumbs = new List<Food>();
 
         SetupBird();
 
@@ -104,14 +106,15 @@ public class Pigeon : MonoBehaviour
                 agent.enabled = false;
                 FlyIn();
                 break;
-            case State.WANDER:               
+            case State.WANDER:
                 agent.enabled = true;
+                agent.isStopped = false;
                 SetNewTarget();
-                agent.SetDestination(target.transform.position);
                 break;
             case State.FOUND_FOOD:
+                agent.isStopped = false;
                 break;
-            case State.EATING:                
+            case State.EATING:
                 break;
             case State.FLY_OUT:
                 anim.SetTrigger("takeOff");
@@ -145,20 +148,16 @@ public class Pigeon : MonoBehaviour
         transform.DOMoveZ(toPos.z, flightTime).From(fromPos.z).SetEase(Ease.InOutSine);
         transform.DOMoveY(toPos.y, flightTime).From(fromPos.y).OnComplete(Land).SetEase(Ease.InOutQuad);
 
-        var lookTowards = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.x);
+        var lookTowards = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.x);
         transform.LookAt(lookTowards);
-                
-        //var direction = (target.transform.position - fromPos).normalized;
-        //var directionFlat = direction - new Vector3(direction.x ,0,direction.z);
-        //transform.DORotate(directionFlat, flightTime).From(direction).SetEase(Ease.InQuint);
-
+        
     }
 
     void Land()
     {
-        SetState(State.WANDER);
         targetReachTime = Time.realtimeSinceStartup;
         LandingTime = Time.realtimeSinceStartup;
+        SetState(State.WANDER);
     }
 
     public void FlyOut()
@@ -179,7 +178,7 @@ public class Pigeon : MonoBehaviour
 
     void DestroyPigeon()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
 
@@ -188,13 +187,12 @@ public class Pigeon : MonoBehaviour
         hungerRate = 1;
         agent.speed = Random.Range(4f, 6f);
         PigeonSpeed = agent.speed;
-        //agent.angularSpeed = Random.Range(3000, 4000);
         agent.acceleration = PigeonSpeed * 0.8f;
-        float rand = Mathf.Floor(Random.Range(0f, 3f));
         updateHungerBar();
+        float rand = Mathf.Floor(Random.Range(0f, 3f));
 
-            //SkinnedMeshRenderer mr = GetComponentInChildren<SkinnedMeshRenderer>();
-            //mr.materials[0].mainTexture = myTexture[(int)rand];
+            SkinnedMeshRenderer mr = GetComponentInChildren<SkinnedMeshRenderer>();
+            mr.materials[0].mainTexture = myTexture[(int)rand];
     }
 
 
@@ -205,86 +203,80 @@ public class Pigeon : MonoBehaviour
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
-                SetNewTarget();
                 targetReachTime = Time.realtimeSinceStartup;
+                SetNewTarget();
             }
         }
         CheckForFood();
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        if (myState == State.WANDER || myState == State.FOUND_FOOD)
+    {       
+        if (other.tag == "Food")
         {
-            if (other.tag == "Food")
-            {
-                //myFood = other.GetComponent<Food>();
-                //SetState(State.FOUND_FOOD);
-                if (myFood != null && Random.Range(0,4) != 1)
-                    {
-                        var otherFoodDist = (other.transform.position - transform.position).magnitude;
-                        var myFoodDist = (myFood.transform.position - transform.position).magnitude;
-                    
-                        if(otherFoodDist < myFoodDist) myFood = other.GetComponent<Food>();
-                    }
-                else myFood = other.GetComponent<Food>();
-                agent.isStopped = false;
-                SetState(State.FOUND_FOOD);
-            }
-        }
-
+            foodCrumbs.Add(other.gameObject.GetComponent<Food>());
+            Debug.Log("food entered the list");
+        }   
     }
 
     //check for food in radius and go for it
-    void CheckForFood() {
-        /*
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 30);
-        int i = 0;
-        while (i < hitColliders.Length)
-        {
-            if (hitColliders[i].tag == "Food")
+    void CheckForFood()
+    {
+        //if (foodCrumbs.Count >= 0)
+        //{       
+
+            int i = 0;
+            while (i < foodCrumbs.Count)
             {
-                if (myFood != null && Random.Range(0,5) != 1)
+                Food foodToCheck = foodCrumbs[i];
+                Debug.Log("checking food List, This is foodToCheck number" + i + "out of" + foodCrumbs.Count + "crumbs");
+
+                if (myFood != null)
                 {
-                    var iFoodDist = (hitColliders[i].transform.position - transform.position).magnitude;
+                    var iFoodDist = (foodToCheck.transform.position - transform.position).magnitude;
                     var myFoodDist = (myFood.transform.position - transform.position).magnitude;
-                    
-                    if(iFoodDist < myFoodDist) myFood = hitColliders[i].GetComponent<Food>();
+
+                    if (iFoodDist < myFoodDist)
+                    {
+                        Debug.Log("Food is near!!!!!!!!");
+                        myFood = foodToCheck;
+                        agent.isStopped = false;
+                        SetState(State.FOUND_FOOD);
+                    }
                 }
-                else myFood = hitColliders[i].GetComponent<Food>();
+                else myFood = foodToCheck;
+                i++;
             }
-            i++;
-        }
-        if (myFood != null)
-        {
-            agent.isStopped = false;
-            SetState(State.FOUND_FOOD);
-        }
-        */
+        //}
+
+        if (!myFood) myState = State.WANDER;        
     }
 
 
-    
+
+
+
     void SetNewTarget()
     {
-        var standingTime = Random.Range(0.01f,2f);
+        var standingTime = Random.Range(0.0f,1.5f);
         
         if (myState == State.WANDER)
         {
             if (standingTime > Time.realtimeSinceStartup - targetReachTime)
             {
-                //Debug.Log("is stanting.........");
+                Debug.Log("is stanting.........");
                 agent.isStopped = true;           
             }
             else
             {
-                //Debug.Log("SetNewTarget");
+                Debug.Log("SetNewTarget");
                 Vector2 pos = Random.insideUnitCircle * walkRadius;
                 coinDropped = false;
                 agent.isStopped = false;
                 agent.SetDestination(RandomNavmeshLocation(walkRadius));
             }
         }
+        else agent.SetDestination(RandomNavmeshLocation(walkRadius));
     }
 
     void DropCoin()
@@ -331,15 +323,6 @@ public class Pigeon : MonoBehaviour
         }
     }
 
-    //Vector3 PickPointOnMesh()
-    //{
-    //    Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
-    //    randomDirection += transform.position;
-    //    NavMeshHit hit;
-    //    NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
-    //    return hit.position;
-    //}
-
     public Vector3 RandomNavmeshLocation(float radius)
     {
         Vector3 randomDirection = Random.insideUnitSphere * radius;
@@ -378,6 +361,7 @@ public class Pigeon : MonoBehaviour
         if (!myFood)
         {
             anim.SetBool("isEating", false);
+            agent.isStopped = false;
             SetState(State.WANDER);
         }
 
@@ -409,6 +393,8 @@ public class Pigeon : MonoBehaviour
     public void AddEnergy()
     {
         hungerRate += hungerDeterior * 10;
+        myFood = null;
+        //SetState(State.WANDER);
     }
 
     void LoveYou()
